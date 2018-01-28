@@ -1,33 +1,11 @@
 #include <stdio.h>
 #include <malloc.h>
+//#include <sys/_null.h>
+#include "queue.h"
+#include "list.h"
+#include "thunderstruct.h"
 
-                        // STRUKTURY
-
-typedef struct str_firma{
-    char* nazwa_firmy;
-    char* nr_NIP; //bo nr nip jest 10-cyfrowy
-    char* nr_konta; //nr konta ma 26 znaków; oslo bug check: co jeśli ktoś wpisze z odstępami
-}firma;
-
-typedef struct str_faktura{
-    char* nr_faktury;
-    firma nabywca;
-    char* data_wystawienia;
-    char* data_sprzedazy;
-    char* sposob_platnosci;
-}faktura;
-
-typedef struct str_zamowienie{
-    char* nazwa;
-    int ilosc;
-    float vat;
-    float cena_netto;
-    float wartosc_netto;
-    float wartosc_brutto;
-}zamowienie;
-
-                        // FUNKCJE
-
+// FUNKCJE
 zamowienie stworz_zamowienie(char* p_nazwa, int p_ilosc, float p_vat, float p_cena_netto) {
     float wartosc_netto = p_ilosc * p_cena_netto;
     zamowienie zam = {
@@ -88,6 +66,9 @@ int main() {
 
     zamowienie zamowienie1 = stworz_zamowienie("chleb", 3, 0.23, 4.0);
     drukuj_zamowienie(zamowienie1);
+
+    zamowienie zamowienie2 = stworz_zamowienie("maslo", 8, 0.23, 8.20);
+    drukuj_zamowienie(zamowienie2);
 
     firma firmaturbokolor = stworz_firme("firmaturbokolor", "1234567890", "09876543210987654321098765");
     drukuj_firme(firmaturbokolor);
