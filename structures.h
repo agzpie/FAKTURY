@@ -1,4 +1,10 @@
 
+typedef struct str_sprzedawca {
+    char przedsiebiorca[31];
+    char nip[11];
+    char nr_konta[27];
+} sprzedawca;
+
 typedef struct str_firma{
     char* nazwa_firmy;
     char* nr_NIP; //bo nr nip jest 10-cyfrowy

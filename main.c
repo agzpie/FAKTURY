@@ -3,7 +3,7 @@
 //#include <sys/_null.h>
 #include "queue.h"
 #include "list.h"
-#include "thunderstruct.h"
+#include "structures.h"
 
 // FUNKCJE
 zamowienie stworz_zamowienie(char* p_nazwa, int p_ilosc, float p_vat, float p_cena_netto) {
@@ -51,16 +51,97 @@ void drukuj_fakture(faktura fak) {
 };
 
 void drukuj_firme(firma fir) {
-    printf("Nazwa firmy = %s\t Numer NIP = %s\t Numer konta = %s\n", fir.nazwa_firmy, fir.nr_NIP, fir.nr_konta);
+    printf("Nazwa firmy = %s\tNumer NIP = %s\t\tNumer konta = %s\n", fir.nazwa_firmy, fir.nr_NIP, fir.nr_konta);
 };
 
+void drukuj_sprzedawce(sprzedawca sprz) {
+    printf("Przedsiebiorca = %s\t\tNumer NIP = %s\t\tNumer konta = %s\t\n", sprz.przedsiebiorca, sprz.nip, sprz.nr_konta);
+};
+
+sprzedawca zainicjalizuj_sprzedawce() {
+    sprzedawca sprz;
+    char* plik = "settings.db";
+    FILE *settings = fopen(plik, "r");
+
+    if (settings != NULL) {
+        int i = 1; // numer wiersza
+        int poz = 0; // pozycja
+        char ch;
+        while ((ch = (char)fgetc(settings)) != (char)EOF) {
+            if (ch == '\t') {
+                i++;
+                poz = 0;
+            }
+            else {
+                switch (i){
+                    case 1: sprz.przedsiebiorca[poz] = ch;
+                            sprz.przedsiebiorca[++poz] = '\0';
+                            break;
+                    case 2: sprz.nip[poz] = ch;
+                            sprz.nip[++poz] = '\0';
+                            break;
+                    case 3: sprz.nr_konta[poz] = ch;
+                            sprz.nr_konta[++poz] = '\0';
+                            break;
+                    default:
+                            break;
+                }
+            }
+        }
+        fclose(settings);
+
+        return sprz;
+    }
+
+
+    printf("Wczytaj nazwe sprzedawcy: ");
+    scanf("%s", sprz.przedsiebiorca);
+    printf("Wczytaj numer NIP: ");
+    scanf("%s", sprz.nip);
+    printf("Wczytaj numer konta: ");
+    scanf("%s", sprz.nr_konta);
+
+
+    settings = fopen(plik, "w");
+    for (int i = 0; i <sizeof(sprz.przedsiebiorca); i++) {
+        if (sprz.przedsiebiorca[i]!='\0') {
+            fputc(sprz.przedsiebiorca[i], settings);
+        }
+        else {
+            fputc((int)'\t', settings);
+            break;
+        }
+    }
+
+    for (int i = 0; i <sizeof(sprz.nip); i++) {
+        if (sprz.nip[i]!='\0') {
+            fputc(sprz.nip[i], settings);
+        }
+        else {
+            fputc((int)'\t', settings);
+            break;
+        }
+    }
+
+    for (int i = 0; i <sizeof(sprz.nr_konta); i++) {
+        if (sprz.nr_konta[i]!='\0') {
+            fputc(sprz.nr_konta[i], settings);
+        }
+        else {
+            break;
+        }
+    }
+
+    return sprz;
+}
+
+
+                // MAIN
+
 int main() {
-
-
-    //FILE *settings = fopen(*settings.db, "r");
-
-
-
+ sprzedawca sprz = zainicjalizuj_sprzedawce();
+  //  printf("Przedsiebiorca = %s\t\tNIP = %s\t\tNumer konta = %s\t\n", sprz.przedsiebiorca, sprz.nip, sprz.nr_konta);
+    drukuj_sprzedawce(sprz);
 /*
  * ToDo na Sobotę:
  * 1. Struktury dla firmy, faktury i zamówienia.
