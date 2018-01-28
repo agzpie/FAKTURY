@@ -5,6 +5,7 @@
 #define _STRUCTURES_
 #include "structures.h"
 #endif
+//https://stackoverflow.com/questions/5430019/redefinition-errors-in-h-files
 
 typedef struct node thunderstruct;
 

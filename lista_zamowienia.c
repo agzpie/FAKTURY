@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "list.h"
+#include "lista_zamowienia.h"
 
 void push_last(thunderstruct *head_node, zamowienie value) {
     if (head_node->next == NULL) {
-        // First node with data
+        // First node
         head_node->next = malloc(sizeof(thunderstruct));
         head_node->next->value = value;
         head_node->next->next = NULL;
     } else {
-        // Second or later node with data
+        // Second or later node
         thunderstruct *current = head_node->next;
         while (current->next != NULL)
             current = current->next;
@@ -76,7 +76,7 @@ void clean(thunderstruct *head_node) {
 void printall(thunderstruct *head_node) {
     thunderstruct *current = head_node->next;
     while (current != NULL) {
-        printf("%d ", current->value);
+        printf("Nazwa zamowienia: %s\n", current->value.nazwa);
         current = current->next;
     }
 }

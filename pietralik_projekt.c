@@ -4,7 +4,7 @@
 #define _STRUCTURES_
 #include "structures.h"
 #endif
-#include "list.h"
+#include "lista_zamowienia.h"
 
 // FUNKCJE
 zamowienie stworz_zamowienie(char* p_nazwa, int p_ilosc, float p_vat, float p_cena_netto) {
@@ -44,19 +44,28 @@ firma stworz_firme(char* nazwa_firmy, char* nr_NIP, char* nr_konta) {
 };
 
 void drukuj_zamowienie(zamowienie zam) {
-    printf("Nazwa = %s\t\t\t wartosc brutto = %f\n", zam.nazwa, zam.wartosc_brutto);
+    printf("Nazwa = %s\t\tWartosc brutto = %f\n", zam.nazwa, zam.wartosc_brutto);
 };
 
 void drukuj_fakture(faktura fak) {
-    printf("Numer faktury = %s\t Nazwa nabywcy = %s\n", fak.nr_faktury, fak.nabywca.nazwa_firmy);
+    printf("Numer faktury = %s\t\tNazwa nabywcy = %s\n", fak.nr_faktury, fak.nabywca.nazwa_firmy);
 };
 
 void drukuj_firme(firma fir) {
-    printf("Nazwa firmy = %s\tNumer NIP = %s\t\tNumer konta = %s\n", fir.nazwa_firmy, fir.nr_NIP, fir.nr_konta);
+    printf("Nazwa firmy = %s\t\tNumer NIP = %s\t\tNumer konta = %s\n", fir.nazwa_firmy, fir.nr_NIP, fir.nr_konta);
 };
 
 void drukuj_sprzedawce(sprzedawca sprz) {
     printf("Przedsiebiorca = %s\t\tNumer NIP = %s\t\tNumer konta = %s\t\n", sprz.przedsiebiorca, sprz.nip, sprz.nr_konta);
+};
+
+int usun_sprzedawce() {
+    int status = remove("settings.db");
+    if (status != 0) {
+        printf("Blad usuwania sprzedawcy");
+    };
+
+    return status;
 };
 
 sprzedawca zainicjalizuj_sprzedawce() {
@@ -136,11 +145,10 @@ sprzedawca zainicjalizuj_sprzedawce() {
     return sprz;
 }
 
-// Zamowienia
-
-
 // MAIN
 int main() {
+
+    /*
     sprzedawca sprz = zainicjalizuj_sprzedawce();
     drukuj_sprzedawce(sprz);
 
@@ -157,8 +165,7 @@ int main() {
     drukuj_fakture(faktura1);
 
     // Lista
-    thunderstruct *head_node = NULL;
-    head_node = malloc(sizeof(thunderstruct));
+    thunderstruct *head_node = malloc(sizeof(thunderstruct));
 
     // malloc test
     if (head_node == NULL)
@@ -166,19 +173,45 @@ int main() {
 
     head_node->next = NULL;
 
+    push_last(head_node, zamowienie1);
+    push_last(head_node, zamowienie2);
+    printf("Test listy zamowien:\n");
+    printall(head_node);
+    */
 
-
-
-    /*
+    // start
+    zainicjalizuj_sprzedawce();
     int opcja;
-    printf("\tWitaj przybyszu, co chcesz dziś zrobić? Wybierz numer:\n");
-    printf("1) Dodaj dane o przedsiebiorcy.\n2)Wystaw fakture VAT.\n3)Usun fakture z bazy danych.\n4)Wyswietl wystawione faktury\n");
-    scanf("%d", opcja);
-    if (opcja<1 && opcja>4){
-        printf("Nie ma takiej opcji. Sprobuj ponownie: ");
-        scanf("%d", opcja);
+    printf("\tWitaj przybyszu, co chcesz dzis zrobic? Wybierz numer: \n");
+    printf("1) Zmodyfikuj dane sprzedawcy.\n2) Wystaw fakture VAT.\n3) Usun fakture z bazy danych.\n4) Wyswietl wystawione faktury.\n5) Wyjdz stad.\n");
+    while (1) {
+        scanf("%d", &opcja);
+        if ((opcja < 1) || (opcja > 5)) {
+            printf("Nie ma takiej opcji. Sprobuj ponownie: ");
+            scanf("%d", &opcja);
+        }
+        switch (opcja) {
+            case 1:
+                if (usun_sprzedawce() != 0) {
+                    return -1;
+                };
+                zainicjalizuj_sprzedawce();
+                break;
+            case 2:
+                printf("opcja jeszcze niedostepna, prosze sprobowac za kilka dni\n");
+                break;
+            case 3:
+                printf("opcja niedostepna, niedlugo bedzie dzialac\n");
+                break;
+            case 4:
+                printf("opcja niekoniecznie dziala, przepraszamy\n");
+                break;
+            case 5:
+                return 0;
+            default:
+                break;
+        }
     }
-     */
 
     return 0;
 }
