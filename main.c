@@ -56,6 +56,11 @@ void drukuj_firme(firma fir) {
 
 int main() {
 
+
+    //FILE *settings = fopen(*settings.db, "r");
+
+
+
 /*
  * ToDo na Sobotę:
  * 1. Struktury dla firmy, faktury i zamówienia.
