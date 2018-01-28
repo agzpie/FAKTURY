@@ -27,3 +27,9 @@ typedef struct str_zamowienie{
     float wartosc_netto;
     float wartosc_brutto;
 }zamowienie;
+
+
+typedef struct node {
+    zamowienie value;
+    struct node *next;
+}thunderstruct;

@@ -3,12 +3,7 @@
 #include <time.h>
 #include "list.h"
 
-typedef struct node {
-    int value;
-    struct node *next;
-}thunderstruct;
-
-void push_last(thunderstruct *head_node, int value) {
+void push_last(thunderstruct *head_node, zamowienie value) {
     if (head_node->next == NULL) {
         // First node with data
         head_node->next = malloc(sizeof(thunderstruct));
@@ -26,7 +21,7 @@ void push_last(thunderstruct *head_node, int value) {
     }
 }
 
-void push_first(thunderstruct *head_node, int value) {
+void push_first(thunderstruct *head_node, zamowienie value) {
     if (head_node->next == NULL) {
         // First node with data
         head_node->next = malloc(sizeof(thunderstruct));
@@ -41,9 +36,10 @@ void push_first(thunderstruct *head_node, int value) {
     head_node->next->next = oldfirst;
 }
 
-int pop_last(thunderstruct *head_node) {
+zamowienie pop_last(thunderstruct *head_node) {
+    zamowienie ret;
     if (head_node->next == NULL) {
-        return -1;
+        return ret;
     }
 
     thunderstruct *current = head_node->next;
@@ -53,17 +49,17 @@ int pop_last(thunderstruct *head_node) {
         current = current->next;
     }
 
-    int ret = current->value;
+    ret = current->value;
     free(prev_current->next);
     prev_current->next = NULL;
 
     return ret;
 }
 
-int pop_first(thunderstruct *head_node) {
+zamowienie pop_first(thunderstruct *head_node) {
     thunderstruct *current = head_node->next;
     thunderstruct *headnn = head_node->next->next;
-    int value = current->value;
+    zamowienie value = current->value;
     free(head_node->next);
     head_node->next=headnn;
 

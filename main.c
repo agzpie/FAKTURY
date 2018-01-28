@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <malloc.h>
-//#include <sys/_null.h>
-#include "queue.h"
-#include "list.h"
+#ifndef _STRUCTURES_
+#define _STRUCTURES_
 #include "structures.h"
+#endif
+#include "list.h"
 
 // FUNKCJE
 zamowienie stworz_zamowienie(char* p_nazwa, int p_ilosc, float p_vat, float p_cena_netto) {
@@ -135,20 +136,13 @@ sprzedawca zainicjalizuj_sprzedawce() {
     return sprz;
 }
 
+// Zamowienia
 
-                // MAIN
 
+// MAIN
 int main() {
- sprzedawca sprz = zainicjalizuj_sprzedawce();
-  //  printf("Przedsiebiorca = %s\t\tNIP = %s\t\tNumer konta = %s\t\n", sprz.przedsiebiorca, sprz.nip, sprz.nr_konta);
+    sprzedawca sprz = zainicjalizuj_sprzedawce();
     drukuj_sprzedawce(sprz);
-/*
- * ToDo na Sobotę:
- * 1. Struktury dla firmy, faktury i zamówienia.
- * 2. Funkcje przyjmujące wartości wprowadzane przez użytkownika.
- * 3. BARDZO PODSTAWOWE funkcje które przyjmują strukturę i wyświetlają jej dane na ekranie
- * 4. Używaj pascal_case a nie camelCase.
- */
 
     zamowienie zamowienie1 = stworz_zamowienie("chleb", 3, 0.23, 4.0);
     drukuj_zamowienie(zamowienie1);
@@ -161,6 +155,17 @@ int main() {
 
     faktura faktura1 = stworz_fakture("100/2018", firmaturbokolor, "28/01/2018", "20/1/2018", "przelew");
     drukuj_fakture(faktura1);
+
+    // Lista
+    thunderstruct *head_node = NULL;
+    head_node = malloc(sizeof(thunderstruct));
+
+    // malloc test
+    if (head_node == NULL)
+        return 1;
+
+    head_node->next = NULL;
+
 
 
 
