@@ -76,7 +76,7 @@ void zamowienia_clean(zamowienia *head_node) {
 void zamowienia_printall(zamowienia *head_node) {
     zamowienia *current = head_node->next;
     while (current != NULL) {
-        printf("Nazwa zamowienia: %s\n", current->value.nazwa);
+        printf("Nazwa zamowienia: %s\t\tNr faktury = %s\n", current->value.nazwa, current->value.fakt->nr_faktury);
         current = current->next;
     }
 }

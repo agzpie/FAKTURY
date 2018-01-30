@@ -9,9 +9,9 @@
 
 typedef struct node_firmy firmy;
 
-void firmy_push_last(firmy *head_node, zamowienie value);
+void firmy_push_last(firmy *head_node, firma value);
 
-void firmy_push_first(firmy *head_node, zamowienie value);
+void firmy_push_first(firmy *head_node, firma value);
 
 zamowienie firmy_pop_last(firmy *head_node);
 

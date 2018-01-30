@@ -76,7 +76,7 @@ void faktury_clean(faktury *head_node) {
 void faktury_printall(faktury *head_node) {
     faktury *current = head_node->next;
     while (current != NULL) {
-        printf("Nr faktury: %s\n", current->value.nr_faktury);
+        printf("Nr faktury: %s\tFirma = %s\n", current->value.nr_faktury, current->value.nabywca->nazwa_firmy);
         current = current->next;
     }
 }
