@@ -7,16 +7,16 @@
 #endif
 //https://stackoverflow.com/questions/5430019/redefinition-errors-in-h-files
 
-typedef struct node thunderstruct;
+typedef struct node_zamowienia zamowienia;
 
-void push_last(thunderstruct *head_node, zamowienie value);
+void zamowienia_push_last(zamowienia *head_node, zamowienie value);
 
-void push_first(thunderstruct *head_node, zamowienie value);
+void zamowienia_push_first(zamowienia *head_node, zamowienie value);
 
-zamowienie pop_last(thunderstruct *head_node);
+zamowienie zamowienia_pop_last(zamowienia *head_node);
 
-zamowienie pop_first(thunderstruct *head_node);
+zamowienie zamowienia_pop_first(zamowienia *head_node);
 
-void clean(thunderstruct *head_node);
+void zamowienia_clean(zamowienia *head_node);
 
-void printall(thunderstruct *head_node);
+void zamowienia_printall(zamowienia *head_node);

@@ -3,47 +3,47 @@
 #include <time.h>
 #include "lista_zamowienia.h"
 
-void zamowienia_push_last(zamowienia *head_node, zamowienie value) {
+void firmy_push_last(firmy *head_node, firma value) {
     if (head_node->next == NULL) {
         // First node
-        head_node->next = malloc(sizeof(zamowienia));
+        head_node->next = malloc(sizeof(firmy));
         head_node->next->value = value;
         head_node->next->next = NULL;
     } else {
         // Second or later node
-        zamowienia *current = head_node->next;
+        firmy *current = head_node->next;
         while (current->next != NULL)
             current = current->next;
 
-        current->next = malloc(sizeof(zamowienia));
+        current->next = malloc(sizeof(firmy));
         current->next->value = value;
         current->next->next = NULL;
     }
 }
 
-void zamowienia_push_first(zamowienia *head_node, zamowienie value) {
+void firmy_push_first(firmy *head_node, firma value) {
     if (head_node->next == NULL) {
         // First node with data
-        head_node->next = malloc(sizeof(zamowienia));
+        head_node->next = malloc(sizeof(firmy));
         head_node->next->value = value;
         head_node->next->next = NULL;
     }
 
     // Existing list
-    zamowienia *oldfirst = head_node->next;
-    head_node->next = malloc(sizeof(zamowienia));
+    firmy *oldfirst = head_node->next;
+    head_node->next = malloc(sizeof(firmy));
     head_node->next->value = value;
     head_node->next->next = oldfirst;
 }
 
-zamowienie zamowienia_pop_last(zamowienia *head_node) {
-    zamowienie ret;
+firma firmy_pop_last(firmy *head_node) {
+    firma ret;
     if (head_node->next == NULL) {
         return ret;
     }
 
-    zamowienia *current = head_node->next;
-    zamowienia *prev_current = head_node;
+    firmy *current = head_node->next;
+    firmy *prev_current = head_node;
     while (current->next != NULL) {
         prev_current = current;
         current = current->next;
@@ -56,27 +56,27 @@ zamowienie zamowienia_pop_last(zamowienia *head_node) {
     return ret;
 }
 
-zamowienie zamowienia_pop_first(zamowienia *head_node) {
-    zamowienia *current = head_node->next;
-    zamowienia *headnn = head_node->next->next;
-    zamowienie value = current->value;
+firma firmy_pop_first(firmy *head_node) {
+    firmy *current = head_node->next;
+    firmy *headnn = head_node->next->next;
+    firma value = current->value;
     free(head_node->next);
     head_node->next=headnn;
 
     return value;
 }
 
-void zamowienia_clean(zamowienia *head_node) {
+void firmy_clean(firmy *head_node) {
     while (head_node->next != NULL)
     {
-        zamowienia_pop_first(head_node);
+        firmy_pop_first(head_node);
     }
 }
 
-void zamowienia_printall(zamowienia *head_node) {
-    zamowienia *current = head_node->next;
+void firmy_printall(firmy *head_node) {
+    firmy *current = head_node->next;
     while (current != NULL) {
-        printf("Nazwa zamowienia: %s\n", current->value.nazwa);
+        printf("Nazwa firmy: %s\n", current->value.nazwa_firmy);
         current = current->next;
     }
 }

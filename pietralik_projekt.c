@@ -4,7 +4,26 @@
 #define _STRUCTURES_
 #include "structures.h"
 #endif
+/*#ifndef _LISTA_ZAMOWIEN_
+#define _LISTA_ZAMOWIEN_
 #include "lista_zamowienia.h"
+#endif
+#ifndef _LISTA_FAKTUR_
+#define _LISTA_FAKTUR_
+#include "lista_faktury.h"
+#endif
+#ifndef _LISTA_FIRM_
+#define _LISTA_FIRM_
+#include "lista_firmy.h"
+#endif*/
+
+#include "lista_zamowienia.h"
+#include "lista_faktury.h"
+#include "lista_firmy.h"
+
+
+// ZMIENNE GLOBALNE
+sprzedawca sprz;
 
 // FUNKCJE
 zamowienie stworz_zamowienie(char* p_nazwa, int p_ilosc, float p_vat, float p_cena_netto) {
@@ -21,23 +40,34 @@ zamowienie stworz_zamowienie(char* p_nazwa, int p_ilosc, float p_vat, float p_ce
     return zam;
 };
 
-faktura stworz_fakture(char* nr_faktury, firma nabywca, char* data_wystawienia, char* data_sprzedazy, char* sposob_platnosci) {
+//faktura stworz_fakture(char* nr_faktury, firma* nabywca, char* data_wystawienia, char* data_sprzedazy, char* sposob_platnosci, char* termin_platnosci, zamowienia zam) {
+faktura stworz_fakture(char* nr_faktury, firma* nabywca, char* data_wystawienia, char* data_sprzedazy, char* sposob_platnosci, char* termin_platnosci) {
     faktura fak = {
         nr_faktury,
         nabywca,
         data_wystawienia,
         data_sprzedazy,
-        sposob_platnosci
+        sposob_platnosci,
+        termin_platnosci//,
+        //zam
     };
 
     return fak;
 };
 
-firma stworz_firme(char* nazwa_firmy, char* nr_NIP, char* nr_konta) {
+void pokaz_fakture(faktura fak) {
+    printf("FAKTURA VAT\n");
+    printf("Nr faktury: %s\n\n", fak.nr_faktury);
+    printf("Sprzedawca:\n%s\nNIP: %s\nnr konta: %s\n\n", sprz.przedsiebiorca, sprz.nip, sprz.nr_konta);
+    // https://stackoverflow.com/questions/10036381/arrow-operator-vs-dot-operator
+    printf("Nabywca:\n%s\nNIP: %s\n\n", fak.nabywca->nazwa_firmy, fak.nabywca->nr_NIP);
+    printf("Data wystawienia:\t%s\nData sprzedazy:\t%s\nSposob platnosci:\t%s\nTermin platnosci:\t%s\n", fak.data_wystawienia, fak.data_sprzedazy, fak.sposob_platnosci);
+}
+
+firma stworz_firme(char* nazwa_firmy, char* nr_NIP) {
     firma fir = {
             nazwa_firmy,
-            nr_NIP,
-            nr_konta,
+            nr_NIP
     };
 
     return fir;
@@ -48,11 +78,11 @@ void drukuj_zamowienie(zamowienie zam) {
 };
 
 void drukuj_fakture(faktura fak) {
-    printf("Numer faktury = %s\t\tNazwa nabywcy = %s\n", fak.nr_faktury, fak.nabywca.nazwa_firmy);
+    printf("Numer faktury = %s\t\tNazwa nabywcy = %s\n", fak.nr_faktury, fak.nabywca->nazwa_firmy);
 };
 
 void drukuj_firme(firma fir) {
-    printf("Nazwa firmy = %s\t\tNumer NIP = %s\t\tNumer konta = %s\n", fir.nazwa_firmy, fir.nr_NIP, fir.nr_konta);
+    printf("Nazwa firmy = %s\t\tNumer NIP = %s\n", fir.nazwa_firmy, fir.nr_NIP);
 };
 
 void drukuj_sprzedawce(sprzedawca sprz) {
@@ -103,14 +133,12 @@ sprzedawca zainicjalizuj_sprzedawce() {
         return sprz;
     }
 
-
     printf("Wczytaj nazwe sprzedawcy: ");
     scanf("%s", sprz.przedsiebiorca);
     printf("Wczytaj numer NIP: ");
     scanf("%s", sprz.nip);
     printf("Wczytaj numer konta: ");
     scanf("%s", sprz.nr_konta);
-
 
     settings = fopen(plik, "w");
     for (int i = 0; i <sizeof(sprz.przedsiebiorca); i++) {
@@ -148,37 +176,67 @@ sprzedawca zainicjalizuj_sprzedawce() {
 // MAIN
 int main() {
 
-    /*
-    sprzedawca sprz = zainicjalizuj_sprzedawce();
+    sprz = zainicjalizuj_sprzedawce();
     drukuj_sprzedawce(sprz);
 
     zamowienie zamowienie1 = stworz_zamowienie("chleb", 3, 0.23, 4.0);
-    drukuj_zamowienie(zamowienie1);
-
     zamowienie zamowienie2 = stworz_zamowienie("maslo", 8, 0.23, 8.20);
+    zamowienie zamowienie3 = stworz_zamowienie("wedlina", 4, 0.23, 19.0);
+    zamowienie zamowienie4 = stworz_zamowienie("sroba", 3, 0.23, 21.0);
+    zamowienie zamowienie5 = stworz_zamowienie("woda", 6, 0.23, 2.0);
+    zamowienie zamowienie6 = stworz_zamowienie("wiertarka", 44, 0.23, 200.0);
+    zamowienie zamowienie7 = stworz_zamowienie("betoniarka", 15, 0.23, 1500.0);
+    drukuj_zamowienie(zamowienie1);
     drukuj_zamowienie(zamowienie2);
+    drukuj_zamowienie(zamowienie3);
+    drukuj_zamowienie(zamowienie4);
+    drukuj_zamowienie(zamowienie5);
+    drukuj_zamowienie(zamowienie6);
+    drukuj_zamowienie(zamowienie7);
 
-    firma firmaturbokolor = stworz_firme("firmaturbokolor", "1234567890", "09876543210987654321098765");
+    firma firmaturbokolor = stworz_firme("turbokolor", "1234567890");
+    firma firmanowak = stworz_firme("nowak and nowak", "5678956757");
+    firma firmakielbasy = stworz_firme("tarczynski kielbasy", "2123576545");
     drukuj_firme(firmaturbokolor);
+    drukuj_firme(firmanowak);
+    drukuj_firme(firmakielbasy);
 
-    faktura faktura1 = stworz_fakture("100/2018", firmaturbokolor, "28/01/2018", "20/1/2018", "przelew");
+    faktura faktura1 = stworz_fakture("101/2018", &firmaturbokolor, "28/01/2018", "20/01/2018", "przelew", "23/01/2018");
+    faktura faktura2 = stworz_fakture("102/2018", &firmaturbokolor, "29/01/2018", "29/01/2018", "gotowka", "24/01/2018");
+    faktura faktura3 = stworz_fakture("103/2018", &firmaturbokolor, "30/01/2018", "30/01/2018", "czek", "25/01/2018");
+    faktura faktura4 = stworz_fakture("104/2018", &firmanowak, "11/02/2018", "22/02/2018", "przelew", "14/02/2018");
+    faktura faktura5 = stworz_fakture("105/2018", &firmakielbasy, "12/02/2018", "23/02/2018", "gotowka", "15/02/2018");
+    faktura faktura6 = stworz_fakture("106/2018", &firmakielbasy, "25/02/2018", "05/03/2018", "czek", "30/02/2018");
     drukuj_fakture(faktura1);
+    drukuj_fakture(faktura2);
+    drukuj_fakture(faktura3);
+    drukuj_fakture(faktura4);
+    drukuj_fakture(faktura5);
+    drukuj_fakture(faktura6);
 
+    pokaz_fakture(faktura1);
+    pokaz_fakture(faktura2);
+    pokaz_fakture(faktura3);
+    pokaz_fakture(faktura4);
+    pokaz_fakture(faktura5);
+    pokaz_fakture(faktura6);
+
+    ///////////
     // Lista
-    thunderstruct *head_node = malloc(sizeof(thunderstruct));
+    zamowienia *lista_zamowien = malloc(sizeof(zamowienia));
 
     // malloc test
-    if (head_node == NULL)
+    if (lista_zamowien == NULL)
         return 1;
 
-    head_node->next = NULL;
+    lista_zamowien->next = NULL;
 
-    push_last(head_node, zamowienie1);
-    push_last(head_node, zamowienie2);
+    zamowienia_push_last(lista_zamowien, zamowienie1);
+    zamowienia_push_last(lista_zamowien, zamowienie2);
     printf("Test listy zamowien:\n");
-    printall(head_node);
-    */
+    zamowienia_printall(lista_zamowien);
 
+    /*
     // start
     zainicjalizuj_sprzedawce();
     int opcja;
@@ -211,7 +269,7 @@ int main() {
             default:
                 break;
         }
-    }
+    }*/
 
     return 0;
 }
