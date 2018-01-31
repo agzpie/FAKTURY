@@ -108,30 +108,44 @@ sprzedawca zainicjalizuj_sprzedawce() {
     FILE *settings = fopen(plik, "r");
 
     if (settings != NULL) {
+        char* buffer = malloc(sizeof(char) * 100); // 100 - maks dlugosc ciagu znakow
+
         int i = 1; // numer wiersza
         int poz = 0; // pozycja
         char ch;
-        while ((ch = (char)fgetc(settings)) != (char)EOF) {
-            if (ch == '\t') {
-                i++;
-                poz = 0;
+        while (1) {
+            ch = (char)fgetc(settings);
+            if ((ch != '\t') && (ch != (char)EOF)) {
+                buffer[poz++] = ch;
             }
             else {
+                char* value = malloc(sizeof(char) * (poz+1));
+
+                for(int j = 0; j<poz; j++)
+                {
+                    value[j]=buffer[j];
+                }
+
                 switch (i){
-                    case 1: sprz.przedsiebiorca[poz] = ch;
-                            sprz.przedsiebiorca[++poz] = '\0';
+                    case 1: sprz.przedsiebiorca = value;
                             break;
-                    case 2: sprz.nip[poz] = ch;
-                            sprz.nip[++poz] = '\0';
+                    case 2: sprz.nip = value;
                             break;
-                    case 3: sprz.nr_konta[poz] = ch;
-                            sprz.nr_konta[++poz] = '\0';
+                    case 3: sprz.nr_konta = value;
                             break;
                     default:
                             break;
                 }
+
+                if (ch == (char)EOF)
+                    break;
+
+                i++;
+                poz=0;
             }
         }
+
+
         fclose(settings);
 
         return sprz;

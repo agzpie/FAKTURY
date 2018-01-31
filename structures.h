@@ -13,9 +13,9 @@
 #endif*/
 
 typedef struct str_sprzedawca {
-    char przedsiebiorca[31];
-    char nip[11];
-    char nr_konta[27];
+    char* przedsiebiorca;
+    char* nip;
+    char* nr_konta;
 }sprzedawca;
 
 typedef struct str_firma{
