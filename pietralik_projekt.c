@@ -52,7 +52,7 @@ faktura stworz_fakture(char* nr_faktury, firma* nabywca, char* data_wystawienia,
         data_wystawienia,
         data_sprzedazy,
         sposob_platnosci,
-        termin_platnosci//,
+        termin_platnosci
         //zam
     };
 
@@ -194,8 +194,6 @@ sprzedawca zainicjalizuj_sprzedawce() {
 // MAIN
 int main() {
 
-    sprz = zainicjalizuj_sprzedawce();
-    drukuj_sprzedawce(sprz);
 
     firma firmaturbokolor = stworz_firme("turbokolor", "1234567890");
     firma firmanowak = stworz_firme("nowak and nowak", "5678956757");
@@ -204,8 +202,10 @@ int main() {
     drukuj_firme(firmanowak);
     drukuj_firme(firmakielbasy);
 
-    faktura faktura1 = stworz_fakture("101/2018", &firmaturbokolor, "28/01/2018", "20/01/2018", "przelew", "23/01/2018");
-    faktura faktura2 = stworz_fakture("102/2018", &firmaturbokolor, "29/01/2018", "29/01/2018", "gotowka", "24/01/2018");
+    faktura faktura1 = stworz_fakture("101/2018", &firmaturbokolor, "28/01/2018", "20/01/2018", "przelew",
+                                      "23/01/2018");
+    faktura faktura2 = stworz_fakture("102/2018", &firmaturbokolor, "29/01/2018", "29/01/2018", "gotowka",
+                                      "24/01/2018");
     faktura faktura3 = stworz_fakture("103/2018", &firmaturbokolor, "30/01/2018", "30/01/2018", "czek", "25/01/2018");
     faktura faktura4 = stworz_fakture("104/2018", &firmanowak, "11/02/2018", "22/02/2018", "przelew", "14/02/2018");
     faktura faktura5 = stworz_fakture("105/2018", &firmakielbasy, "12/02/2018", "23/02/2018", "gotowka", "15/02/2018");
@@ -240,7 +240,6 @@ int main() {
     pokaz_fakture(faktura5);
     pokaz_fakture(faktura6);
 
-    ///////////
     // Lista firm
     lista_firm = malloc(sizeof(firmy));
     if (lista_firm == NULL)
@@ -283,11 +282,11 @@ int main() {
 
 
     // MENU (nieskonczone)
-    /*
+
     // start
     zainicjalizuj_sprzedawce();
     int opcja;
-    printf("\tWitaj przybyszu, co chcesz dzis zrobic? Wybierz numer: \n");
+    printf("\tWitaj towarzyszu, co chcesz dzis zrobic? Wybierz numer: \n");
     printf("1) Zmodyfikuj dane sprzedawcy.\n2) Wystaw fakture VAT.\n3) Usun fakture z bazy danych.\n4) Wyswietl wystawione faktury.\n5) Wyjdz stad.\n");
     while (1) {
         scanf("%d", &opcja);
@@ -303,7 +302,52 @@ int main() {
                 zainicjalizuj_sprzedawce();
                 break;
             case 2:
-                printf("opcja jeszcze niedostepna, prosze sprobowac za kilka dni\n");
+                printf("Liczba zamowien: ");
+                int licz = 0;
+                int licznik = 0;
+                scanf("%d", licz);
+
+                float brutto;
+                zamowienie *zam1;
+                while(licznik<licz) {
+                    printf("Podaj dane zamowienia:\nNazwa produktu: ");
+                    scanf("%s", zam1->nazwa);
+                    printf("Ilosc: ");
+                    scanf("%d", zam1->ilosc);
+                    printf("VAT: ");
+                    scanf("%f", zam1->vat);
+                    printf("Wartosc netto: ");
+                    scanf("%f", zam1->wartosc_netto);
+                    printf("Numer faktury: ");
+                    scanf("%s", zam1->fakt);
+                    brutto = (*(zam1->vat)**(zam1->wartosc_netto)/100);
+                    printf("Wartosc brutto: %f", brutto);
+                    licznik++;
+                }
+
+                firma fir1;
+                printf("Podaj dane firmy:\nNazwa firmy: ");
+                scanf("%s", fir1.nazwa_firmy);
+                printf("Nr NIP: ");
+                scanf("%s", fir1.nr_NIP);
+
+                faktura *fak1;
+                printf("Podaj date wystawienia: ");
+                scanf("%s", fak1->data_wystawienia);
+                printf("Sprzedazy: ");
+                scanf("%s", fak1->data_sprzedazy);
+                printf("Sposob platnosci: ");
+                scanf("%s", fak1->sposob_platnosci);
+                printf("Termin platnosci: ");
+                scanf("%s", fak1->termin_platnosci);
+
+                faktura f1 = stworz_fakture(zam1->fakt, fir1.nazwa_firmy, fak1->data_wystawienia, fak1->data_sprzedazy, fak1->sposob_platnosci, fak1->termin_platnosci);
+                pokaz_fakture(f1);
+
+
+                break;
+
+                //printf("opcja jeszcze niedostepna, prosze sprobowac za kilka dni\n");
                 break;
             case 3:
                 printf("opcja niedostepna, niedlugo bedzie dzialac\n");
@@ -316,7 +360,7 @@ int main() {
             default:
                 break;
         }
-    }*/
+    }
 
     return 0;
 }
