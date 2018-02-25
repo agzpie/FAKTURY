@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "lista_zamowienia.h"
 
 void zamowienia_push_last(zamowienia *head_node, zamowienie value) {

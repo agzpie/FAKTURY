@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-C:/GIT/FAKTURY/lista_faktury.c
+C:/Users/Agata/Desktop/FAKTURY/lista_faktury.c
 stdio.h
 -
 stdlib.h
@@ -14,9 +14,9 @@ stdlib.h
 time.h
 -
 lista_zamowienia.h
-C:/GIT/FAKTURY/lista_zamowienia.h
+C:/Users/Agata/Desktop/FAKTURY/lista_zamowienia.h
 
-C:/GIT/FAKTURY/lista_faktury.h
+C:/Users/Agata/Desktop/FAKTURY/lista_faktury.h
 stdio.h
 -
 stdlib.h
@@ -24,9 +24,9 @@ stdlib.h
 time.h
 -
 structures.h
-C:/GIT/FAKTURY/structures.h
+C:/Users/Agata/Desktop/FAKTURY/structures.h
 
-C:/GIT/FAKTURY/lista_firmy.c
+C:/Users/Agata/Desktop/FAKTURY/lista_firmy.c
 stdio.h
 -
 stdlib.h
@@ -34,9 +34,9 @@ stdlib.h
 time.h
 -
 lista_zamowienia.h
-C:/GIT/FAKTURY/lista_zamowienia.h
+C:/Users/Agata/Desktop/FAKTURY/lista_zamowienia.h
 
-C:/GIT/FAKTURY/lista_firmy.h
+C:/Users/Agata/Desktop/FAKTURY/lista_firmy.h
 stdio.h
 -
 stdlib.h
@@ -44,19 +44,17 @@ stdlib.h
 time.h
 -
 structures.h
-C:/GIT/FAKTURY/structures.h
+C:/Users/Agata/Desktop/FAKTURY/structures.h
 
-C:/GIT/FAKTURY/lista_zamowienia.c
+C:/Users/Agata/Desktop/FAKTURY/lista_zamowienia.c
 stdio.h
 -
 stdlib.h
--
-time.h
 -
 lista_zamowienia.h
-C:/GIT/FAKTURY/lista_zamowienia.h
+C:/Users/Agata/Desktop/FAKTURY/lista_zamowienia.h
 
-C:/GIT/FAKTURY/lista_zamowienia.h
+C:/Users/Agata/Desktop/FAKTURY/lista_zamowienia.h
 stdio.h
 -
 stdlib.h
@@ -64,33 +62,35 @@ stdlib.h
 time.h
 -
 structures.h
-C:/GIT/FAKTURY/structures.h
+C:/Users/Agata/Desktop/FAKTURY/structures.h
 
-C:/GIT/FAKTURY/pietralik_projekt.c
+C:/Users/Agata/Desktop/FAKTURY/pietralik_projekt.c
 stdio.h
 -
 malloc.h
 -
+string.h
+-
 structures.h
-C:/GIT/FAKTURY/structures.h
+C:/Users/Agata/Desktop/FAKTURY/structures.h
 lista_zamowienia.h
-C:/GIT/FAKTURY/lista_zamowienia.h
+C:/Users/Agata/Desktop/FAKTURY/lista_zamowienia.h
 lista_faktury.h
-C:/GIT/FAKTURY/lista_faktury.h
+C:/Users/Agata/Desktop/FAKTURY/lista_faktury.h
 lista_firmy.h
-C:/GIT/FAKTURY/lista_firmy.h
+C:/Users/Agata/Desktop/FAKTURY/lista_firmy.h
 lista_zamowienia.h
-C:/GIT/FAKTURY/lista_zamowienia.h
+C:/Users/Agata/Desktop/FAKTURY/lista_zamowienia.h
 lista_faktury.h
-C:/GIT/FAKTURY/lista_faktury.h
+C:/Users/Agata/Desktop/FAKTURY/lista_faktury.h
 lista_firmy.h
-C:/GIT/FAKTURY/lista_firmy.h
+C:/Users/Agata/Desktop/FAKTURY/lista_firmy.h
 
-C:/GIT/FAKTURY/structures.h
+C:/Users/Agata/Desktop/FAKTURY/structures.h
 lista_zamowienia.h
-C:/GIT/FAKTURY/lista_zamowienia.h
+C:/Users/Agata/Desktop/FAKTURY/lista_zamowienia.h
 lista_faktury.h
-C:/GIT/FAKTURY/lista_faktury.h
+C:/Users/Agata/Desktop/FAKTURY/lista_faktury.h
 lista_firmy.h
-C:/GIT/FAKTURY/lista_firmy.h
+C:/Users/Agata/Desktop/FAKTURY/lista_firmy.h
 

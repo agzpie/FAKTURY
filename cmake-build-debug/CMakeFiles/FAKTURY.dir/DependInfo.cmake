@@ -4,10 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "C:/GIT/FAKTURY/lista_faktury.c" "C:/GIT/FAKTURY/cmake-build-debug/CMakeFiles/FAKTURY.dir/lista_faktury.c.obj"
-  "C:/GIT/FAKTURY/lista_firmy.c" "C:/GIT/FAKTURY/cmake-build-debug/CMakeFiles/FAKTURY.dir/lista_firmy.c.obj"
-  "C:/GIT/FAKTURY/lista_zamowienia.c" "C:/GIT/FAKTURY/cmake-build-debug/CMakeFiles/FAKTURY.dir/lista_zamowienia.c.obj"
-  "C:/GIT/FAKTURY/pietralik_projekt.c" "C:/GIT/FAKTURY/cmake-build-debug/CMakeFiles/FAKTURY.dir/pietralik_projekt.c.obj"
+  "C:/Users/Agata/Desktop/FAKTURY/lista_faktury.c" "C:/Users/Agata/Desktop/FAKTURY/cmake-build-debug/CMakeFiles/FAKTURY.dir/lista_faktury.c.obj"
+  "C:/Users/Agata/Desktop/FAKTURY/lista_firmy.c" "C:/Users/Agata/Desktop/FAKTURY/cmake-build-debug/CMakeFiles/FAKTURY.dir/lista_firmy.c.obj"
+  "C:/Users/Agata/Desktop/FAKTURY/lista_zamowienia.c" "C:/Users/Agata/Desktop/FAKTURY/cmake-build-debug/CMakeFiles/FAKTURY.dir/lista_zamowienia.c.obj"
+  "C:/Users/Agata/Desktop/FAKTURY/pietralik_projekt.c" "C:/Users/Agata/Desktop/FAKTURY/cmake-build-debug/CMakeFiles/FAKTURY.dir/pietralik_projekt.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <string.h>
 #ifndef _STRUCTURES_
 #define _STRUCTURES_
 #include "structures.h"
@@ -89,7 +90,7 @@ void drukuj_firme(firma fir) {
     printf("Nazwa firmy = %s\t\tNumer NIP = %s\n", fir.nazwa_firmy, fir.nr_NIP);
 };
 
-void drukuj_sprzedawce(sprzedawca sprz) {
+void drukuj_sprzedawce() {
     printf("Przedsiebiorca = %s\t\tNumer NIP = %s\t\tNumer konta = %s\t\n", sprz.przedsiebiorca, sprz.nip, sprz.nr_konta);
 };
 
@@ -102,8 +103,7 @@ int usun_sprzedawce() {
     return status;
 };
 
-sprzedawca zainicjalizuj_sprzedawce() {
-    sprzedawca sprz;
+void zainicjalizuj_sprzedawce() {
     char* plik = "settings.db";
     FILE *settings = fopen(plik, "r");
 
@@ -115,7 +115,7 @@ sprzedawca zainicjalizuj_sprzedawce() {
         char ch;
         while (1) {
             ch = (char)fgetc(settings);
-            if ((ch != '\t') && (ch != (char)EOF)) {
+            if ((ch != ';') && (ch != (char)EOF)) {
                 buffer[poz++] = ch;
             }
             else {
@@ -145,56 +145,103 @@ sprzedawca zainicjalizuj_sprzedawce() {
             }
         }
 
-
         fclose(settings);
-
-        return sprz;
+        return;
     }
 
+    char * nazwa = malloc(sizeof(char)*30),* nip = malloc(sizeof(char)*30), *nr_konta = malloc(sizeof(char)*30);
     printf("Wczytaj nazwe sprzedawcy: ");
-    scanf("%s", sprz.przedsiebiorca);
+    scanf("%s", nazwa);
     printf("Wczytaj numer NIP: ");
-    scanf("%s", sprz.nip);
+    scanf("%s", nip);
     printf("Wczytaj numer konta: ");
-    scanf("%s", sprz.nr_konta);
+    scanf("%s", nr_konta);
+
+    sprz.przedsiebiorca = nazwa;
+    sprz.nip = nip;
+    sprz.nr_konta = nr_konta;
 
     settings = fopen(plik, "w");
-    for (int i = 0; i <sizeof(sprz.przedsiebiorca); i++) {
-        if (sprz.przedsiebiorca[i]!='\0') {
+    for (int i = 0; i <strlen(sprz.przedsiebiorca); i++) {
             fputc(sprz.przedsiebiorca[i], settings);
-        }
-        else {
-            fputc((int)'\t', settings);
-            break;
-        }
     }
+    fputc((int)';', settings);
 
-    for (int i = 0; i <sizeof(sprz.nip); i++) {
-        if (sprz.nip[i]!='\0') {
+    for (int i = 0; i <strlen(sprz.nip); i++) {
             fputc(sprz.nip[i], settings);
-        }
-        else {
-            fputc((int)'\t', settings);
-            break;
-        }
     }
 
-    for (int i = 0; i <sizeof(sprz.nr_konta); i++) {
-        if (sprz.nr_konta[i]!='\0') {
+    fputc((int)';', settings);
+
+    for (int i = 0; i <strlen(sprz.nr_konta); i++) {
             fputc(sprz.nr_konta[i], settings);
-        }
-        else {
-            break;
-        }
     }
 
-    return sprz;
+    fclose(settings);
+};
+
+firma* znajdz_firme(firmy *head_node, char* nr_NIP) {
+    firmy *current = head_node->next;
+    while (current != NULL) {
+        if (current->value.nr_NIP == nr_NIP) {
+            return &(current->value);
+        }
+        current = current->next;
+    }
+    printf("Nie znaleziono takiej firmy. ");
+    return NULL;
+};
+
+void opcja2_stworz_fakture () {
+
+    /*
+    printf("Liczba zamowien: ");
+    int licz = 0;
+    int licznik = 0;
+    scanf("%d", licz);
+
+    float brutto;
+    zamowienie *zam1;
+    while(licznik<licz) {
+        printf("Podaj dane zamowienia:\nNazwa produktu: ");
+        scanf("%s", zam1->nazwa);
+        printf("Ilosc: ");
+        scanf("%d", zam1->ilosc);
+        printf("VAT: ");
+        scanf("%f", zam1->vat);
+        printf("Wartosc netto: ");
+        scanf("%f", zam1->wartosc_netto);
+        printf("Numer faktury: ");
+        scanf("%s", zam1->fakt);
+        //brutto = (*(zam1->vat)**(zam1->wartosc_netto)/100);
+        printf("Wartosc brutto: %f", brutto);
+        licznik++;
+    }
+
+    firma fir1;
+    printf("Podaj dane firmy:\nNazwa firmy: ");
+    scanf("%s", fir1.nazwa_firmy);
+    printf("Nr NIP: ");
+    scanf("%s", fir1.nr_NIP);
+
+    faktura *fak1;
+    printf("Podaj date wystawienia: ");
+    scanf("%s", fak1->data_wystawienia);
+    printf("Sprzedazy: ");
+    scanf("%s", fak1->data_sprzedazy);
+    printf("Sposob platnosci: ");
+    scanf("%s", fak1->sposob_platnosci);
+    printf("Termin platnosci: ");
+    scanf("%s", fak1->termin_platnosci);
+
+    faktura f1 = stworz_fakture(zam1->fakt, fir1.nazwa_firmy, fak1->data_wystawienia, fak1->data_sprzedazy, fak1->sposob_platnosci, fak1->termin_platnosci);
+    pokaz_fakture(f1);
+    */
 }
 
 // MAIN
 int main() {
-
-
+    /*
     firma firmaturbokolor = stworz_firme("turbokolor", "1234567890");
     firma firmanowak = stworz_firme("nowak and nowak", "5678956757");
     firma firmakielbasy = stworz_firme("tarczynski kielbasy", "2123576545");
@@ -218,6 +265,8 @@ int main() {
     zamowienie zamowienie5 = stworz_zamowienie("woda", 6, 0.23, 2.0, &faktura2);
     zamowienie zamowienie6 = stworz_zamowienie("wiertarka", 44, 0.23, 200.0, &faktura3);
     zamowienie zamowienie7 = stworz_zamowienie("betoniarka", 15, 0.23, 1500.0, &faktura3);
+    */
+
     /*drukuj_zamowienie(zamowienie1);
     drukuj_zamowienie(zamowienie2);
     drukuj_zamowienie(zamowienie3);
@@ -233,13 +282,16 @@ int main() {
     drukuj_fakture(faktura5);
     drukuj_fakture(faktura6);*/
 
+    /*
     pokaz_fakture(faktura1);
     pokaz_fakture(faktura2);
     pokaz_fakture(faktura3);
     pokaz_fakture(faktura4);
     pokaz_fakture(faktura5);
     pokaz_fakture(faktura6);
+    */
 
+    /*
     // Lista firm
     lista_firm = malloc(sizeof(firmy));
     if (lista_firm == NULL)
@@ -279,18 +331,36 @@ int main() {
     zamowienia_push_last(lista_zamowien, zamowienie7);
     printf("Test listy zamowien:\n");
     zamowienia_printall(lista_zamowien);
+    */
 
+    // MENU - POCZATEK PROGRAMU
+    // Lista firm
+    lista_firm = malloc(sizeof(firmy));
+    if (lista_firm == NULL)
+        return 1;
+    lista_firm->next = NULL;
 
-    // MENU (nieskonczone)
+    // Lista faktur
+    lista_faktur = malloc(sizeof(faktury));
+    if (lista_faktur == NULL)
+        return 1;
+    lista_faktur->next = NULL;
 
-    // start
+    // Lista zamowien
+    lista_zamowien = malloc(sizeof(zamowienia));
+    if (lista_zamowien == NULL)
+        return 1;
+    lista_zamowien->next = NULL;
+
     zainicjalizuj_sprzedawce();
+    drukuj_sprzedawce();
     int opcja;
     printf("\tWitaj towarzyszu, co chcesz dzis zrobic? Wybierz numer: \n");
-    printf("1) Zmodyfikuj dane sprzedawcy.\n2) Wystaw fakture VAT.\n3) Usun fakture z bazy danych.\n4) Wyswietl wystawione faktury.\n5) Wyjdz stad.\n");
+    printf("1) Zmodyfikuj dane sprzedawcy.\n2) Wystaw fakture VAT.\n3) Usun fakture z bazy danych.\n"
+                   "4) Wyswietl wystawione faktury.\n5) Dodaj firme.\n6) Usun firme.\n7)Wyswietl firmy.\n8) Wyjdz stad.\n");
     while (1) {
         scanf("%d", &opcja);
-        if ((opcja < 1) || (opcja > 5)) {
+        if ((opcja < 1) || (opcja > 8)) {
             printf("Nie ma takiej opcji. Sprobuj ponownie: ");
             scanf("%d", &opcja);
         }
@@ -300,62 +370,28 @@ int main() {
                     return -1;
                 };
                 zainicjalizuj_sprzedawce();
+                drukuj_sprzedawce();
                 break;
             case 2:
-                printf("Liczba zamowien: ");
-                int licz = 0;
-                int licznik = 0;
-                scanf("%d", licz);
-
-                float brutto;
-                zamowienie *zam1;
-                while(licznik<licz) {
-                    printf("Podaj dane zamowienia:\nNazwa produktu: ");
-                    scanf("%s", zam1->nazwa);
-                    printf("Ilosc: ");
-                    scanf("%d", zam1->ilosc);
-                    printf("VAT: ");
-                    scanf("%f", zam1->vat);
-                    printf("Wartosc netto: ");
-                    scanf("%f", zam1->wartosc_netto);
-                    printf("Numer faktury: ");
-                    scanf("%s", zam1->fakt);
-                    brutto = (*(zam1->vat)**(zam1->wartosc_netto)/100);
-                    printf("Wartosc brutto: %f", brutto);
-                    licznik++;
-                }
-
-                firma fir1;
-                printf("Podaj dane firmy:\nNazwa firmy: ");
-                scanf("%s", fir1.nazwa_firmy);
-                printf("Nr NIP: ");
-                scanf("%s", fir1.nr_NIP);
-
-                faktura *fak1;
-                printf("Podaj date wystawienia: ");
-                scanf("%s", fak1->data_wystawienia);
-                printf("Sprzedazy: ");
-                scanf("%s", fak1->data_sprzedazy);
-                printf("Sposob platnosci: ");
-                scanf("%s", fak1->sposob_platnosci);
-                printf("Termin platnosci: ");
-                scanf("%s", fak1->termin_platnosci);
-
-                faktura f1 = stworz_fakture(zam1->fakt, fir1.nazwa_firmy, fak1->data_wystawienia, fak1->data_sprzedazy, fak1->sposob_platnosci, fak1->termin_platnosci);
-                pokaz_fakture(f1);
-
-
-                break;
-
-                //printf("opcja jeszcze niedostepna, prosze sprobowac za kilka dni\n");
+                opcja2_stworz_fakture();
                 break;
             case 3:
-                printf("opcja niedostepna, niedlugo bedzie dzialac\n");
+                printf("ZAIMPLEMENTOWAC\n");
                 break;
             case 4:
-                printf("opcja niekoniecznie dziala, przepraszamy\n");
+                printf("ZAIMPLEMENTOWAC\n");
                 break;
             case 5:
+                printf("ZAIMPLEMENTOWAC\n");
+                break;
+            case 6:
+                printf("ZAIMPLEMENTOWAC\n");
+                break;
+            case 7:
+                printf("Dostepne firmy:\n");
+                firmy_printall(lista_firm);
+                break;
+            case 8:
                 return 0;
             default:
                 break;
