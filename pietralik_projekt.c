@@ -126,6 +126,8 @@ void zainicjalizuj_sprzedawce() {
                     value[j]=buffer[j];
                 }
 
+                value[poz] = '\0';
+
                 switch (i){
                     case 1: sprz.przedsiebiorca = value;
                             break;
