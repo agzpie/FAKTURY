@@ -180,8 +180,8 @@ void zainicjalizuj_sprzedawce() {
     fclose(settings);
 };
 
-firma* znajdz_firme(firmy *head_node, char* nr_NIP) {
-    firmy *current = head_node->next;
+firma* znajdz_firme(char* nr_NIP) {
+    firmy *current = lista_firm->next;
     while (current != NULL) {
         if (current->value.nr_NIP == nr_NIP) {
             return &(current->value);
@@ -193,6 +193,65 @@ firma* znajdz_firme(firmy *head_node, char* nr_NIP) {
 };
 
 void opcja2_stworz_fakture () {
+    firma *znaleziona_firma;
+
+    while(1) {
+        printf("Podaj NIP firmy:");
+        char *nip;
+        scanf("%s", nip);
+        znaleziona_firma = znajdz_firme(nip);
+        if (znaleziona_firma != NULL) {
+            break;
+        }
+
+        printf("Zly NIP. Wybierz:\n1) Sprobuj ponownie.\n2) Powrot do menu.");
+        int choice;
+        scanf("%d", choice);
+        if (choice == 2) {
+            return;
+        }
+    }
+
+    // Na tym etapie znaleziona_firma powinno miec poprawna firme
+    // Mozemy zaczac tworzyc fakture a nastepnie liste zamowien
+
+
+    faktura *fak1;
+    printf("Podaj date wystawienia: ");
+    scanf("%s", fak1->data_wystawienia);
+    printf("Sprzedazy: ");
+    scanf("%s", fak1->data_sprzedazy);
+    printf("Sposob platnosci: ");
+    scanf("%s", fak1->sposob_platnosci);
+    printf("Termin platnosci: ");
+    scanf("%s", fak1->termin_platnosci);
+
+    while(1) {
+        zamowienie nowe_zamowienie;
+        printf("Podaj dane zamowienia:\nNazwa produktu: ");
+        scanf("%s", nowe_zamowienie.nazwa);
+        printf("Ilosc: ");
+        scanf("%d", nowe_zamowienie.ilosc);
+        printf("VAT: ");
+        scanf("%f", nowe_zamowienie.vat);
+        printf("Wartosc netto: ");
+        scanf("%f", nowe_zamowienie.wartosc_netto);
+        printf("Numer faktury: ");
+        scanf("%s", nowe_zamowienie.fakt);
+        nowe_zamowienie.wartosc_brutto = ((nowe_zamowienie.vat/100) + 1)*(nowe_zamowienie.wartosc_netto);
+        printf("Wartosc brutto = %f", nowe_zamowienie.wartosc_brutto);
+
+        zamowienia_push_last(lista_zamowien, nowe_zamowienie);
+
+        printf("Wybierz:\n1) Dodaj kolejne zamowienie.\n2) Powrot do menu.");
+        int choice;
+        scanf("%d", choice);
+        if (choice == 2) {
+            return;
+        }
+    }
+
+
 
     /*
     printf("Liczba zamowien: ");
