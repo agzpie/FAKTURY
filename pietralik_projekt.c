@@ -312,50 +312,103 @@ void opcja2_stworz_fakture () {
     */
 }
 
+void faktury_printall_z_zamowieniami() {
+    faktury *current = lista_faktur->next;
+    while (current != NULL) {
+        printf("---\nNr faktury: %s\tFirma = %s\n", current->value.nr_faktury, current->value.nabywca->nazwa_firmy);
+
+        // Zamowienia:
+        zamowienia *current_zam = lista_zamowien->next;
+        while (current_zam != NULL) {
+            if (current_zam->value.fakt->nr_faktury == current->value.nr_faktury) {
+                printf("Produkt: %s\t\n", current_zam->value.nazwa);
+            }
+
+            current_zam = current_zam->next;
+        }
+
+        current = current->next;
+    }
+}
+
 // MAIN
 int main() {
-    /*
+    // LISTY - POCZATEK PROGRAMU
+    // Lista firm
+    lista_firm = malloc(sizeof(firmy));
+    if (lista_firm == NULL)
+        return 1;
+    lista_firm->next = NULL;
+
+    // Lista faktur
+    lista_faktur = malloc(sizeof(faktury));
+    if (lista_faktur == NULL)
+        return 1;
+    lista_faktur->next = NULL;
+
+    // Lista zamowien
+    lista_zamowien = malloc(sizeof(zamowienia));
+    if (lista_zamowien == NULL)
+        return 1;
+    lista_zamowien->next = NULL;
+
+    // TEMP
     firma firmaturbokolor = stworz_firme("turbokolor", "1234567890");
     firma firmanowak = stworz_firme("nowak and nowak", "5678956757");
     firma firmakielbasy = stworz_firme("tarczynski kielbasy", "2123576545");
-    drukuj_firme(firmaturbokolor);
-    drukuj_firme(firmanowak);
-    drukuj_firme(firmakielbasy);
-
-    faktura faktura1 = stworz_fakture("101/2018", &firmaturbokolor, "28/01/2018", "20/01/2018", "przelew",
-                                      "23/01/2018");
-    faktura faktura2 = stworz_fakture("102/2018", &firmaturbokolor, "29/01/2018", "29/01/2018", "gotowka",
-                                      "24/01/2018");
+    faktura faktura1 = stworz_fakture("101/2018", &firmaturbokolor, "28/01/2018", "20/01/2018", "przelew", "23/01/2018");
+    faktura faktura2 = stworz_fakture("102/2018", &firmaturbokolor, "29/01/2018", "29/01/2018", "gotowka", "24/01/2018");
     faktura faktura3 = stworz_fakture("103/2018", &firmaturbokolor, "30/01/2018", "30/01/2018", "czek", "25/01/2018");
     faktura faktura4 = stworz_fakture("104/2018", &firmanowak, "11/02/2018", "22/02/2018", "przelew", "14/02/2018");
     faktura faktura5 = stworz_fakture("105/2018", &firmakielbasy, "12/02/2018", "23/02/2018", "gotowka", "15/02/2018");
     faktura faktura6 = stworz_fakture("106/2018", &firmakielbasy, "25/02/2018", "05/03/2018", "czek", "30/02/2018");
-
     zamowienie zamowienie1 = stworz_zamowienie("chleb", 3, 0.23, 4.0, &faktura1);
     zamowienie zamowienie2 = stworz_zamowienie("maslo", 8, 0.23, 8.20, &faktura1);
     zamowienie zamowienie3 = stworz_zamowienie("wedlina", 4, 0.23, 19.0, &faktura1);
-    zamowienie zamowienie4 = stworz_zamowienie("sroba", 3, 0.23, 21.0, &faktura2);
+    zamowienie zamowienie4 = stworz_zamowienie("wedka", 3, 0.23, 21.0, &faktura2);
     zamowienie zamowienie5 = stworz_zamowienie("woda", 6, 0.23, 2.0, &faktura2);
     zamowienie zamowienie6 = stworz_zamowienie("wiertarka", 44, 0.23, 200.0, &faktura3);
     zamowienie zamowienie7 = stworz_zamowienie("betoniarka", 15, 0.23, 1500.0, &faktura3);
-    */
-
-    /*drukuj_zamowienie(zamowienie1);
+    zamowienie zamowienie8 = stworz_zamowienie("ryba", 3, 0.23, 17.0, &faktura4);
+    zamowienie zamowienie9 = stworz_zamowienie("komputer", 1, 0.23, 3000, &faktura5);
+    zamowienie zamowienie10 = stworz_zamowienie("brzeszczot", 1, 0.23, 260.0, &faktura6);
+    zamowienie zamowienie11 = stworz_zamowienie("pila", 2, 0.23, 340.0, &faktura6);
+    firmy_push_last(lista_firm, firmaturbokolor);
+    firmy_push_last(lista_firm, firmanowak);
+    firmy_push_last(lista_firm, firmakielbasy);
+    faktury_push_last(lista_faktur, faktura1);
+    faktury_push_last(lista_faktur, faktura2);
+    faktury_push_last(lista_faktur, faktura3);
+    faktury_push_last(lista_faktur, faktura4);
+    faktury_push_last(lista_faktur, faktura5);
+    faktury_push_last(lista_faktur, faktura6);
+    zamowienia_push_last(lista_zamowien, zamowienie1);
+    zamowienia_push_last(lista_zamowien, zamowienie2);
+    zamowienia_push_last(lista_zamowien, zamowienie3);
+    zamowienia_push_last(lista_zamowien, zamowienie4);
+    zamowienia_push_last(lista_zamowien, zamowienie5);
+    zamowienia_push_last(lista_zamowien, zamowienie6);
+    zamowienia_push_last(lista_zamowien, zamowienie7);
+    zamowienia_push_last(lista_zamowien, zamowienie8);
+    zamowienia_push_last(lista_zamowien, zamowienie9);
+    zamowienia_push_last(lista_zamowien, zamowienie10);
+    zamowienia_push_last(lista_zamowien, zamowienie11);
+    /*
+    drukuj_firme(firmaturbokolor);
+    drukuj_firme(firmanowak);
+    drukuj_firme(firmakielbasy);drukuj_zamowienie(zamowienie1);
     drukuj_zamowienie(zamowienie2);
     drukuj_zamowienie(zamowienie3);
     drukuj_zamowienie(zamowienie4);
     drukuj_zamowienie(zamowienie5);
     drukuj_zamowienie(zamowienie6);
-    drukuj_zamowienie(zamowienie7);*/
-
-    /*drukuj_fakture(faktura1);
+    drukuj_zamowienie(zamowienie7);
+    drukuj_fakture(faktura1);
     drukuj_fakture(faktura2);
     drukuj_fakture(faktura3);
     drukuj_fakture(faktura4);
     drukuj_fakture(faktura5);
-    drukuj_fakture(faktura6);*/
-
-    /*
+    drukuj_fakture(faktura6);
     pokaz_fakture(faktura1);
     pokaz_fakture(faktura2);
     pokaz_fakture(faktura3);
@@ -364,66 +417,8 @@ int main() {
     pokaz_fakture(faktura6);
     */
 
-    /*
-    // Lista firm
-    lista_firm = malloc(sizeof(firmy));
-    if (lista_firm == NULL)
-        return 1;
-    lista_firm->next = NULL;
-    firmy_push_last(lista_firm, firmaturbokolor);
-    firmy_push_last(lista_firm, firmanowak);
-    firmy_push_last(lista_firm, firmakielbasy);
-    printf("Test listy firm:\n");
-    firmy_printall(lista_firm);
-
-    // Lista faktur
-    lista_faktur = malloc(sizeof(faktury));
-    if (lista_faktur == NULL)
-        return 1;
-    lista_faktur->next = NULL;
-    faktury_push_last(lista_faktur, faktura1);
-    faktury_push_last(lista_faktur, faktura2);
-    faktury_push_last(lista_faktur, faktura3);
-    faktury_push_last(lista_faktur, faktura4);
-    faktury_push_last(lista_faktur, faktura5);
-    faktury_push_last(lista_faktur, faktura6);
-    printf("Test listy faktur:\n");
-    faktury_printall(lista_faktur);
-
-    // Lista zamowien
-    lista_zamowien = malloc(sizeof(zamowienia));
-    if (lista_zamowien == NULL)
-        return 1;
-    lista_zamowien->next = NULL;
-    zamowienia_push_last(lista_zamowien, zamowienie1);
-    zamowienia_push_last(lista_zamowien, zamowienie2);
-    zamowienia_push_last(lista_zamowien, zamowienie3);
-    zamowienia_push_last(lista_zamowien, zamowienie4);
-    zamowienia_push_last(lista_zamowien, zamowienie5);
-    zamowienia_push_last(lista_zamowien, zamowienie6);
-    zamowienia_push_last(lista_zamowien, zamowienie7);
-    printf("Test listy zamowien:\n");
-    zamowienia_printall(lista_zamowien);
-    */
-
-    // MENU - POCZATEK PROGRAMU
-    // Lista firm
-    lista_firm = malloc(sizeof(firmy));
-    if (lista_firm == NULL)
-        return 1;
-    lista_firm->next = NULL;
-
-    // Lista faktur
-    lista_faktur = malloc(sizeof(faktury));
-    if (lista_faktur == NULL)
-        return 1;
-    lista_faktur->next = NULL;
-
-    // Lista zamowien
-    lista_zamowien = malloc(sizeof(zamowienia));
-    if (lista_zamowien == NULL)
-        return 1;
-    lista_zamowien->next = NULL;
+    faktury_printall_z_zamowieniami();
+    // TEMP
 
     zainicjalizuj_sprzedawce();
     drukuj_sprzedawce();
@@ -449,18 +444,27 @@ int main() {
                 break;
             case 2:
                 opcja2_stworz_fakture();
+                // ZAPISZ
                 break;
             case 3:
                 printf("ZAIMPLEMENTOWAC\n");
+                // ZNAJDZ FAKTURE
+                // USUN ZAMOWIENIA Z LISTY
+                // USUN FAKTURE Z LISTY
+                // ZAPISZ
                 break;
             case 4:
-                printf("ZAIMPLEMENTOWAC\n");
+                faktury_printall_z_zamowieniami();
                 break;
             case 5:
                 opcja5_dodaj_firme();
+                // ZAPISZ
                 break;
             case 6:
                 printf("ZAIMPLEMENTOWAC\n");
+                // ZNAJDZ FIRME
+                // USUN FIRME Z LISTY
+                // ZAPISZ
                 break;
             case 7:
                 printf("Dostepne firmy:\n");
@@ -472,6 +476,4 @@ int main() {
                 break;
         }
     }
-
-    return 0;
 }
