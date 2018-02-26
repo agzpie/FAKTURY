@@ -76,7 +76,7 @@ void firmy_clean(firmy *head_node) {
 void firmy_printall(firmy *head_node) {
     firmy *current = head_node->next;
     while (current != NULL) {
-        printf("Nazwa firmy: %s\n", current->value.nazwa_firmy);
+        printf("Nazwa firmy:\t%s\t\tNr NIP:\t%s\n", current->value.nazwa_firmy, current->value.nr_NIP);
         current = current->next;
     }
 }

@@ -194,6 +194,18 @@ firma* znajdz_firme(char* nr_NIP) {
     return NULL;
 };
 
+void opcja5_dodaj_firme () {
+    char *nazwa = malloc(sizeof(char)*100);
+    char *nip = malloc(sizeof(char)*10);
+    printf("Podaj nazwe firmy: ");
+    scanf("%s", nazwa);
+    printf("Podaj nr NIP firmy: ");
+    scanf("%s", nip);
+
+    firma nowa_firma = stworz_firme(nazwa,nip);
+    firmy_push_last(lista_firm, nowa_firma);
+}
+
 void opcja2_stworz_fakture () {
     firma *znaleziona_firma;
 
@@ -417,9 +429,11 @@ int main() {
     drukuj_sprzedawce();
     int opcja;
     printf("\tWitaj towarzyszu, co chcesz dzis zrobic? Wybierz numer: \n");
-    printf("1) Zmodyfikuj dane sprzedawcy.\n2) Wystaw fakture VAT.\n3) Usun fakture z bazy danych.\n"
-                   "4) Wyswietl wystawione faktury.\n5) Dodaj firme.\n6) Usun firme.\n7)Wyswietl firmy.\n8) Wyjdz stad.\n");
+
     while (1) {
+        printf("\n___________________________\n");
+        printf("1) Zmodyfikuj dane sprzedawcy.\n2) Wystaw fakture VAT.\n3) Usun fakture z bazy danych.\n"
+                       "4) Wyswietl wystawione faktury.\n5) Dodaj firme.\n6) Usun firme.\n7) Wyswietl firmy.\n8) Wyjdz stad.\n");
         scanf("%d", &opcja);
         if ((opcja < 1) || (opcja > 8)) {
             printf("Nie ma takiej opcji. Sprobuj ponownie: ");
@@ -443,7 +457,7 @@ int main() {
                 printf("ZAIMPLEMENTOWAC\n");
                 break;
             case 5:
-                printf("ZAIMPLEMENTOWAC\n");
+                opcja5_dodaj_firme();
                 break;
             case 6:
                 printf("ZAIMPLEMENTOWAC\n");
