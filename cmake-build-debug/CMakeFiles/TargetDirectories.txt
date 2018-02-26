@@ -1,3 +1,0 @@
-C:/Users/Agata/Desktop/FAKTURY/cmake-build-debug/CMakeFiles/FAKTURY.dir
-C:/Users/Agata/Desktop/FAKTURY/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Agata/Desktop/FAKTURY/cmake-build-debug/CMakeFiles/rebuild_cache.dir
