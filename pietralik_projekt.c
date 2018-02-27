@@ -245,6 +245,63 @@ void opcja5_dodaj_firme () {
     firmy_push_last(lista_firm, nowa_firma);
 }
 
+void opcja2_stworz_fakture_wersjabeta () {
+    faktura *fak;
+    firma *fir;
+    zamowienie *zam;
+    fak = malloc(sizeof(faktura));
+    fir = malloc(sizeof(firma));
+    zam = malloc(sizeof(zamowienie));
+    int ilosc;
+    float cenanetto;
+    char *nazwa = malloc(sizeof(char)*20);
+
+    printf("Podaj nazwe produktu, jego ilosc, cene netto: ");
+    scanf("%s %d %f", nazwa, &ilosc, &cenanetto);
+
+    zam->nazwa = nazwa;
+    zam->ilosc = ilosc;
+    zam->cena_netto = cenanetto;
+
+    char *datawyst = malloc(sizeof(char)*10);
+    char *datasprz = malloc(sizeof(char)*10);
+    char *dataplat = malloc(sizeof(char)*10);
+    char *sposob = malloc(sizeof(char)*20);
+
+    printf("Podaj date wystawienia faktury, sprzedazy, sposob platnosci i termin platnosci: ");
+    scanf("%s %s %s %s", datawyst, datasprz, sposob, dataplat);
+
+    char *nabywca = malloc(sizeof(char)*40);
+    char *nip = malloc(sizeof(char)*10);
+    char *nrfak = malloc(sizeof(char)*10);
+
+    printf("Podaj numer faktury: ");
+    scanf("%s", nrfak);
+    printf("Podaj nabywce: ");
+    scanf("%s", nabywca);
+    printf("Podaj numer NIP: ");
+    scanf("%s", nip);
+
+    nrfak = fak->nr_faktury;
+    nabywca = fir->nazwa_firmy;
+    nip = fir->nr_NIP;
+    //not finished
+    printf("\n___________________\n");
+
+    //FAKTURA
+    printf("FAKTURA VAT\nNumer: %s\n\nSprzedawca:\n%s\nNIP: %s\nNr konta: %s\n\n", nrfak, sprz.przedsiebiorca, sprz.nip, sprz.nr_konta);
+    printf("Nabywca:\n%s\nNIP: %s\n", nabywca, nip);
+    float wartosc_netto, vat, cena_brutto, wartosc_brutto;
+    printf("Nazwa produktu: %s\tIlosc: %d\tCena netto: %f\t", zam->nazwa, zam->ilosc, zam->cena_netto);
+    wartosc_netto = zam->cena_netto*zam->ilosc;
+    vat = 0.23;
+    cena_brutto = zam->cena_netto*(1+vat);
+    wartosc_brutto = cena_brutto*zam->ilosc;
+    printf("Wartosc netto: %f\tVAT: %f\tCena brutto: %f\tWartosc brutto: %f\n", wartosc_netto, vat, cena_brutto, wartosc_brutto);
+    printf("\n___________________\n");
+
+}
+
 void opcja2_stworz_fakture () {
     firma *znaleziona_firma;
 
@@ -571,7 +628,7 @@ int main() {
     // TEMP
     firma firmaturbokolor = stworz_firme("turbokolor", "1234567890");
     firma firmanowak = stworz_firme("nowak and nowak", "5678956757");
-    firma firmakielbasy = stworz_firme("tarczynski kielbasy", "2123576545");
+    firma firmakielbasy = stworz_firme("t-ski kielbasy", "2123576545");
     faktura faktura1 = stworz_fakture("101/2018", &firmaturbokolor, "28/01/2018", "20/01/2018", "przelew", "23/01/2018");
     faktura faktura2 = stworz_fakture("102/2018", &firmaturbokolor, "29/01/2018", "29/01/2018", "gotowka", "24/01/2018");
     faktura faktura3 = stworz_fakture("103/2018", &firmaturbokolor, "30/01/2018", "30/01/2018", "czek", "25/01/2018");
@@ -637,7 +694,7 @@ int main() {
                 drukuj_sprzedawce();
                 break;
             case 2:
-                opcja2_stworz_fakture();
+                opcja2_stworz_fakture_wersjabeta();
                 // ZAPISZ
                 break;
             case 3:
