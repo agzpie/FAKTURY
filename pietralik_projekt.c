@@ -17,6 +17,9 @@ firmy *lista_firm;
 faktury *lista_faktur;
 zamowienia *lista_zamowien;
 
+// STALE
+const int BUFFER = 100;
+
 // FUNKCJE
 zamowienie stworz_zamowienie(char* p_nazwa, int p_ilosc, float p_vat, float p_cena_netto, faktura* fak) {
     float wartosc_netto = p_ilosc * p_cena_netto;
@@ -110,7 +113,7 @@ void zainicjalizuj_sprzedawce() {
     FILE *settings = fopen(plik, "r");
 
     if (settings != NULL) {
-        char* buffer = malloc(sizeof(char) * 100); // 100 - maks dlugosc ciagu znakow
+        char* buffer = malloc(sizeof(char) * BUFFER);
 
         int i = 1; // numer kolumny
         int poz = 0; // pozycja w wierszu
@@ -210,32 +213,31 @@ faktura* znajdz_fakture(char* nr_faktury) {
 };
 
 faktura* wpisz_fakture() {
-    int buffer = 100;
-    char value[buffer];
+    char value[BUFFER];
     faktura *nowa_faktura = malloc(sizeof(faktura));
 
     printf("Numer faktury:\n");
-    fgets(value, 100, stdin);
+    fgets(value, BUFFER, stdin);
     nowa_faktura->nr_faktury = malloc(sizeof(char)*strlen(value));
     strcpy(nowa_faktura->nr_faktury, value);
 
     printf("Data sprzedazy:\n");
-    fgets(value, buffer, stdin);
+    fgets(value, BUFFER, stdin);
     nowa_faktura->data_sprzedazy = malloc(sizeof(char)*strlen(value));
     strcpy(nowa_faktura->data_sprzedazy, value);
 
     printf("Data wystawienia:\n");
-    fgets(value, buffer, stdin);
+    fgets(value, BUFFER, stdin);
     nowa_faktura->data_wystawienia = malloc(sizeof(char)*strlen(value));
     strcpy(nowa_faktura->data_wystawienia, value);
 
     printf("Termin platnosci:\n");
-    fgets(value, buffer, stdin);
+    fgets(value, BUFFER, stdin);
     nowa_faktura->termin_platnosci = malloc(sizeof(char)*strlen(value));
     strcpy(nowa_faktura->termin_platnosci, value);
 
     printf("Sposob platnosci:\n");
-    fgets(value, buffer, stdin);
+    fgets(value, BUFFER, stdin);
     nowa_faktura->sposob_platnosci = malloc(sizeof(char)*strlen(value));
     strcpy(nowa_faktura->sposob_platnosci, value);
 
@@ -247,7 +249,7 @@ faktura* wpisz_fakture() {
 }
 
 void opcja5_dodaj_firme () {
-    char *nazwa = malloc(sizeof(char)*100);
+    char *nazwa = malloc(sizeof(char)*BUFFER);
     char *nip = malloc(sizeof(char)*10);
     printf("Podaj nazwe firmy: ");
     scanf("%s", nazwa);
@@ -320,7 +322,7 @@ void opcja2_stworz_fakture () {
 
     while(1) {
         printf("Podaj NIP firmy:");
-        char *nip = malloc(sizeof(char)*100);
+        char *nip = malloc(sizeof(char)*BUFFER);
         scanf("%s", nip);
         znaleziona_firma = znajdz_firme(nip);
         if (znaleziona_firma != NULL) {
@@ -426,7 +428,7 @@ void zapisz_faktury() {
     char *plik = "faktury.db";
     FILE *baza = fopen(plik, "w");
     faktury *faktura = lista_faktur->next;
-    char *buffer = malloc(sizeof(char)*100);
+    char *buffer = malloc(sizeof(char)*BUFFER);
 
     int pierwsza_linia = 1;
     while (faktura != NULL) {
@@ -477,7 +479,7 @@ void zapisz_zamowienia() {
     char *plik = "zamowienia.db";
     FILE *baza = fopen(plik, "w");
     zamowienia *zamowienie = lista_zamowien->next;
-    char *buffer = malloc(sizeof(char)*100);
+    char *buffer = malloc(sizeof(char)*BUFFER);
 
     int pierwsza_linia = 1;
     while (zamowienie != NULL) {
@@ -558,7 +560,7 @@ void wczytaj_firmy() {
     if (baza != NULL) {
         firmy_clean(lista_firm);
 
-        char *buffer = malloc(sizeof(char) * 100); // 100 - maks dlugosc ciagu znakow
+        char *buffer = malloc(sizeof(char) * BUFFER);
 
         int koniec_pliku = 0;
         char ch;
@@ -627,7 +629,7 @@ void wczytaj_faktury() {
     if (baza != NULL) {
         faktury_clean(lista_faktur);
 
-        char *buffer = malloc(sizeof(char) * 100); // 100 - maks dlugosc ciagu znakow
+        char *buffer = malloc(sizeof(char) * BUFFER);
 
         int koniec_pliku = 0;
         char ch;
@@ -708,7 +710,7 @@ void wczytaj_zamowienia() {
     if (baza != NULL) {
         zamowienia_clean(lista_zamowien);
 
-        char *buffer = malloc(sizeof(char) * 100); // 100 - maks dlugosc ciagu znakow
+        char *buffer = malloc(sizeof(char) * BUFFER);
 
         int koniec_pliku = 0;
         char ch;
