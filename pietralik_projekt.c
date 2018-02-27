@@ -206,6 +206,36 @@ void opcja5_dodaj_firme () {
     firmy_push_last(lista_firm, nowa_firma);
 }
 
+void opcja2_stworz_fakture_wersjabeta () {
+    faktura *fak;
+    firma *fir;
+    zamowienie *zam;
+    fak = malloc(sizeof(faktura));
+    fir = malloc(sizeof(firma));
+    zam = malloc (sizeof(zamowienie));
+
+    printf("Podaj nazwe produktu, jego ilosc, cene netto: ");
+    scanf("%s, %d, %f", zam->nazwa, zam->ilosc, zam->cena_netto);
+
+
+    printf("Podaj date wystawienia faktury, sprzedazy, sposob platnosci i termin platnosci: ");
+    scanf("%s, %s, %s, %s", fak->data_wystawienia, fak->data_sprzedazy, fak->sposob_platnosci, fak->termin_platnosci);
+    printf("Podaj numer faktury: ");
+    scanf("%s", fak->nr_faktury);
+    printf("Podaj nabywcę: ");
+    scanf("%s", fir->nazwa_firmy);
+    printf("Podaj numer NIP: ");
+    scanf("%s", fir->nr_NIP);
+
+    printf("\n___________________\n");
+
+    printf("FAKTURA VAT\nNumer: %s\n\nSprzedawca:\n%s\nNIP: %s\nNr konta: %s\n\n", fak->nr_faktury, sprz.przedsiebiorca, sprz.nip, sprz.nr_konta);
+    printf("Nabywca:\n%d\nNIP: %d\n", fir->nazwa_firmy, fir->nr_NIP);
+
+
+
+}
+
 void opcja2_stworz_fakture () {
     firma *znaleziona_firma;
 
@@ -355,7 +385,7 @@ int main() {
     // TEMP
     firma firmaturbokolor = stworz_firme("turbokolor", "1234567890");
     firma firmanowak = stworz_firme("nowak and nowak", "5678956757");
-    firma firmakielbasy = stworz_firme("tarczynski kielbasy", "2123576545");
+    firma firmakielbasy = stworz_firme("t-ski kielbasy", "2123576545");
     faktura faktura1 = stworz_fakture("101/2018", &firmaturbokolor, "28/01/2018", "20/01/2018", "przelew", "23/01/2018");
     faktura faktura2 = stworz_fakture("102/2018", &firmaturbokolor, "29/01/2018", "29/01/2018", "gotowka", "24/01/2018");
     faktura faktura3 = stworz_fakture("103/2018", &firmaturbokolor, "30/01/2018", "30/01/2018", "czek", "25/01/2018");
@@ -417,7 +447,7 @@ int main() {
     pokaz_fakture(faktura6);
     */
 
-    faktury_printall_z_zamowieniami();
+    //faktury_printall_z_zamowieniami();
     // TEMP
 
     zainicjalizuj_sprzedawce();
