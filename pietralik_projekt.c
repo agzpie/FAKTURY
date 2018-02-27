@@ -111,8 +111,8 @@ void zainicjalizuj_sprzedawce() {
     if (settings != NULL) {
         char* buffer = malloc(sizeof(char) * 100); // 100 - maks dlugosc ciagu znakow
 
-        int i = 1; // numer wiersza
-        int poz = 0; // pozycja
+        int i = 1; // numer kolumny
+        int poz = 0; // pozycja w wierszu
         char ch;
         while (1) {
             ch = (char)fgetc(settings);
@@ -120,7 +120,7 @@ void zainicjalizuj_sprzedawce() {
                 buffer[poz++] = ch;
             }
             else {
-                char* value = malloc(sizeof(char) * (poz+1));
+                char *value = malloc(sizeof(char) * (poz+1));
 
                 for(int j = 0; j<poz; j++)
                 {
@@ -148,6 +148,7 @@ void zainicjalizuj_sprzedawce() {
             }
         }
 
+        free(buffer);
         fclose(settings);
         return;
     }
@@ -478,6 +479,72 @@ void zapisz_dane() {
     zapisz_firmy();
     zapisz_zamowienia();
     zapisz_faktury();
+}
+
+firmy* wczytaj_firmy() {
+    char *plik = "firmy.db";
+    FILE *baza = fopen(plik, "r");
+
+    if (baza != NULL) {
+        char *buffer = malloc(sizeof(char) * 100); // 100 - maks dlugosc ciagu znakow
+
+        int i = 1; // numer kolumny
+        int poz = 0; // pozycja w wierszu
+        char ch;
+        while (1) {
+            ch = (char)fgetc(baza);
+            if ((ch != ';') && (ch != (char)EOF)) {
+                buffer[poz++] = ch;
+            }
+            else {
+                char *value = malloc(sizeof(char) * (poz+1));
+
+                for(int j = 0; j<poz; j++)
+                {
+                    value[j]=buffer[j];
+                }
+
+                value[poz] = '\0';
+
+                switch (i){
+                    case 1: sprz.przedsiebiorca = value;
+                        break;
+                    case 2: sprz.nip = value;
+                        break;
+                    case 3: sprz.nr_konta = value;
+                        break;
+                    default:
+                        break;
+                }
+
+                if (ch == (char)EOF)
+                    break;
+
+                i++;
+                poz=0;
+            }
+        }
+
+        // TODO uncomment + strcpy
+        //free(buffer);
+        fclose(baza);
+
+        return;
+    }
+}
+
+zamowienia* wczytaj_zamowienia() {
+
+}
+
+faktury* wczytaj_faktury() {
+
+}
+
+void wczytaj_dane() {
+    lista_firm = wczytaj_firmy();
+    //lista_zamowien = wczytaj_zamowienia();
+    //lista_faktur = wczytaj_faktury();
 }
 
 // MAIN
