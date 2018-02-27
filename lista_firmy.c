@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "lista_zamowienia.h"
 
 void firmy_push_last(firmy *head_node, firma value) {

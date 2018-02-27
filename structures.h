@@ -1,17 +1,3 @@
-
-/*#ifndef _LISTA_ZAMOWIEN_
-#define _LISTA_ZAMOWIEN_
-#include "lista_zamowienia.h"
-#endif
-#ifndef _LISTA_FAKTUR_
-#define _LISTA_FAKTUR_
-#include "lista_faktury.h"
-#endif
-#ifndef _LISTA_FIRM_
-#define _LISTA_FIRM_
-#include "lista_firmy.h"
-#endif*/
-
 typedef struct str_sprzedawca {
     char* przedsiebiorca;
     char* nip;

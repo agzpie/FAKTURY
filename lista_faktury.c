@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "lista_zamowienia.h"
 
 void faktury_push_last(faktury *head_node, faktura value) {
