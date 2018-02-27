@@ -10,7 +10,6 @@
 #include "lista_faktury.h"
 #include "lista_firmy.h"
 
-
 // ZMIENNE GLOBALNE
 sprzedawca sprz;
 firmy *lista_firm;
@@ -48,15 +47,6 @@ faktura stworz_fakture(char* nr_faktury, firma* nabywca, char* data_wystawienia,
 
     return fak;
 };
-
-void pokaz_fakture(faktura fak) {
-    printf("FAKTURA VAT\n");
-    printf("Nr faktury: %s\n\n", fak.nr_faktury);
-    printf("Sprzedawca:\n%s\nNIP: %s\nnr konta: %s\n\n", sprz.przedsiebiorca, sprz.nip, sprz.nr_konta);
-    // https://stackoverflow.com/questions/10036381/arrow-operator-vs-dot-operator
-    printf("Nabywca:\n%s\nNIP: %s\n\n", fak.nabywca->nazwa_firmy, fak.nabywca->nr_NIP);
-    printf("Data wystawienia:\t%s\nData sprzedazy:\t%s\nSposob platnosci:\t%s\nTermin platnosci:\t%s\n", fak.data_wystawienia, fak.data_sprzedazy, fak.sposob_platnosci, fak.termin_platnosci);
-}
 
 firma stworz_firme(char* nazwa_firmy, char* nr_NIP) {
     firma fir = {
@@ -212,7 +202,7 @@ faktura* znajdz_fakture(char* nr_faktury) {
     return NULL;
 };
 
-faktura* wpisz_fakture() {
+/*faktura* wpisz_fakture_beta() {
     char value[BUFFER];
     faktura *nowa_faktura = malloc(sizeof(faktura));
 
@@ -246,21 +236,167 @@ faktura* wpisz_fakture() {
     drukuj_fakture(nowa_faktura);
 
     return nowa_faktura;
+}*/
+
+faktura* wpisz_fakture(firma *nabywca) {
+    char *buff_numer = malloc(sizeof(char)*BUFFER);
+    printf("Podaj numer faktury: \n");
+    scanf("%s", buff_numer);
+    char *numer = malloc(sizeof(char)*strlen(buff_numer));
+    strcpy(numer, buff_numer);
+    free(buff_numer);
+
+    char *buff_data_wystawienia = malloc(sizeof(char)*BUFFER);
+    printf("Podaj date wystawienia: \n");
+    scanf("%s", buff_data_wystawienia);
+    char *data_wystawienia = malloc(sizeof(char)*strlen(buff_data_wystawienia));
+    strcpy(data_wystawienia, buff_data_wystawienia);
+    free(buff_data_wystawienia);
+
+    char *buff_data_sprzedazy = malloc(sizeof(char)*BUFFER);
+    printf("Podaj date sprzedazy: \n");
+    scanf("%s", buff_data_sprzedazy);
+    char *data_sprzedazy = malloc(sizeof(char)*strlen(buff_data_sprzedazy));
+    strcpy(data_sprzedazy, buff_data_sprzedazy);
+    free(buff_data_sprzedazy);
+
+    char *buff_sposob_platnosci = malloc(sizeof(char)*BUFFER);
+    printf("Podaj sposob platnosci: \n");
+    scanf("%s", buff_sposob_platnosci);
+    char *sposob_platnosci = malloc(sizeof(char)*strlen(buff_sposob_platnosci));
+    strcpy(sposob_platnosci, buff_sposob_platnosci);
+    free(buff_sposob_platnosci);
+
+    char *buff_termin_platnosci = malloc(sizeof(char)*BUFFER);
+    printf("Podaj termin platnosci: \n");
+    scanf("%s", buff_termin_platnosci);
+    char *termin_platnosci = malloc(sizeof(char)*strlen(buff_termin_platnosci));
+    strcpy(termin_platnosci, buff_termin_platnosci);
+    free(buff_termin_platnosci);
+
+    faktura *nowa_faktura = malloc(sizeof(faktura));
+    nowa_faktura->nr_faktury = numer;
+    nowa_faktura->nabywca = nabywca;
+    nowa_faktura->data_wystawienia = data_wystawienia;
+    nowa_faktura->data_sprzedazy = data_sprzedazy;
+    nowa_faktura->sposob_platnosci = sposob_platnosci;
+    nowa_faktura->termin_platnosci = termin_platnosci;
+
+    return nowa_faktura;
+}
+
+zamowienie* wpisz_zamowienie(faktura *fakt) {
+    char *buff_nazwa = malloc(sizeof(char)*BUFFER);
+    printf("Podaj nazwe produktu: \n");
+    scanf("%s", buff_nazwa);
+    char *nazwa = malloc(sizeof(char)*strlen(buff_nazwa));
+    strcpy(nazwa, buff_nazwa);
+    free(buff_nazwa);
+
+    char *buff_ilosc = malloc(sizeof(char)*BUFFER);
+    printf("Podaj ilosc: \n");
+    scanf("%s", buff_ilosc);
+    int ilosc = (int) strtol(buff_ilosc, (char **)NULL, 10);
+
+    char *buff_vat = malloc(sizeof(char)*BUFFER);
+    printf("Podaj stawke VAT: \n");
+    scanf("%s", buff_vat);
+    float vat = (float)atof(buff_vat);
+
+    char *buff_cena = malloc(sizeof(char)*BUFFER);
+    printf("Podaj cene netto: \n");
+    scanf("%s", buff_cena);
+    float cena = (float)atof(buff_cena);
+
+    zamowienie *nowe_zamowienie = malloc(sizeof(zamowienie));
+    nowe_zamowienie->nazwa = nazwa;
+    nowe_zamowienie->fakt = fakt;
+    nowe_zamowienie->ilosc = ilosc;
+    nowe_zamowienie->vat = vat;
+    nowe_zamowienie->cena_netto = cena;
+    nowe_zamowienie->wartosc_netto = nowe_zamowienie->ilosc * nowe_zamowienie->cena_netto;
+    nowe_zamowienie->wartosc_brutto = (nowe_zamowienie->vat + 1)*(nowe_zamowienie->wartosc_netto);
+
+    return nowe_zamowienie;
 }
 
 void opcja5_dodaj_firme () {
-    char *nazwa = malloc(sizeof(char)*BUFFER);
-    char *nip = malloc(sizeof(char)*10);
+    char *buff_nazwa = malloc(sizeof(char)*BUFFER);
     printf("Podaj nazwe firmy: ");
-    scanf("%s", nazwa);
+    scanf("%s", buff_nazwa);
+    char *nazwa = malloc(sizeof(char)*strlen(buff_nazwa));
+    strcpy(nazwa, buff_nazwa);
+    free(buff_nazwa);
+
+    char *buff_nip = malloc(sizeof(char)*BUFFER);
     printf("Podaj nr NIP firmy: ");
-    scanf("%s", nip);
+    scanf("%s", buff_nip);
+    char *nip = malloc(sizeof(char)*strlen(buff_nip));
+    strcpy(nip, buff_nip);
+    free(buff_nip);
 
     firma nowa_firma = stworz_firme(nazwa,nip);
     firmy_push_last(lista_firm, nowa_firma);
 }
 
-void opcja2_stworz_fakture_wersjabeta () {
+/*void opcja2_stworz_fakture_wersjaalpha () {
+    firma *znaleziona_firma;
+
+    while(1) {
+        printf("Podaj NIP firmy:");
+        char *nip = malloc(sizeof(char)*BUFFER);
+        scanf("%s", nip);
+        znaleziona_firma = znajdz_firme(nip);
+        if (znaleziona_firma != NULL) {
+            break;
+        }
+        free(nip);
+
+        printf("Zly NIP. Wybierz:\n1) Sprobuj ponownie.\n2) Powrot do menu.");
+        int choice;
+        scanf("%d", choice);
+        if (choice == 2) {
+            return;
+        }
+    }
+
+    // Na tym etapie znaleziona_firma powinno miec poprawna firme
+    // Mozemy zaczac tworzyc fakture a nastepnie liste zamowien
+
+    // TODO - kod do poprawki
+    faktura *fakt = wpisz_fakture();
+    printf("DRUKUJ2");
+    drukuj_fakture(fakt);
+    faktury_push_last(lista_faktur, *fakt);
+    faktury_printall(lista_faktur);
+
+    while(1) {
+        zamowienie *nowe_zamowienie = malloc(sizeof(zamowienie));
+        printf("Podaj dane zamowienia:\nNazwa produktu: ");
+        scanf("%s", nowe_zamowienie->nazwa);
+        printf("Ilosc: ");
+        scanf("%d", nowe_zamowienie->ilosc);
+        printf("VAT: ");
+        scanf("%f", nowe_zamowienie->vat);
+        printf("Wartosc netto: ");
+        scanf("%f", nowe_zamowienie->wartosc_netto);
+        printf("Numer faktury: ");
+        scanf("%s", nowe_zamowienie->fakt);
+        nowe_zamowienie->wartosc_brutto = ((nowe_zamowienie->vat/100) + 1)*(nowe_zamowienie->wartosc_netto);
+        printf("Wartosc brutto = %f", nowe_zamowienie->wartosc_brutto);
+
+        zamowienia_push_last(lista_zamowien, *nowe_zamowienie);
+
+        printf("Wybierz:\n1) Dodaj kolejne zamowienie.\n2) Powrot do menu.");
+        int choice;
+        scanf("%d", choice);
+        if (choice == 2) {
+            return;
+        }
+    }
+}*/
+
+/*void opcja2_stworz_fakture_wersjabeta () {
     faktura *fak;
     firma *fir;
     zamowienie *zam;
@@ -314,10 +450,9 @@ void opcja2_stworz_fakture_wersjabeta () {
     wartosc_brutto = cena_brutto*zam->ilosc;
     printf("Wartosc netto: %f\tVAT: %f\tCena brutto: %f\tWartosc brutto: %f\n", wartosc_netto, vat, cena_brutto, wartosc_brutto);
     printf("\n___________________\n");
+}*/
 
-}
-
-void opcja2_stworz_fakture () {
+void opcja2_stworz_fakture() {
     firma *znaleziona_firma;
 
     while(1) {
@@ -331,43 +466,27 @@ void opcja2_stworz_fakture () {
         free(nip);
 
         printf("Zly NIP. Wybierz:\n1) Sprobuj ponownie.\n2) Powrot do menu.");
-        int choice;
-        scanf("%d", choice);
+        int choice = 0;
+        scanf("%d", &choice);
         if (choice == 2) {
             return;
         }
     }
 
-    // Na tym etapie znaleziona_firma powinno miec poprawna firme
+    // Na tym etapie znaleziona_firma powinno miec odniesienie do poprawnej firmy
     // Mozemy zaczac tworzyc fakture a nastepnie liste zamowien
+    faktura *nowa_faktura = wpisz_fakture(znaleziona_firma);
+    faktury_push_last(lista_faktur, *nowa_faktura);
 
-    // TODO - kod do poprawki
-    faktura *fakt = wpisz_fakture();
-    printf("DRUKUJ2");
-    drukuj_fakture(fakt);
-    faktury_push_last(lista_faktur, *fakt);
-    faktury_printall(lista_faktur);
-
+    int i = 0;
     while(1) {
-        zamowienie *nowe_zamowienie = malloc(sizeof(zamowienie));
-        printf("Podaj dane zamowienia:\nNazwa produktu: ");
-        scanf("%s", nowe_zamowienie->nazwa);
-        printf("Ilosc: ");
-        scanf("%d", nowe_zamowienie->ilosc);
-        printf("VAT: ");
-        scanf("%f", nowe_zamowienie->vat);
-        printf("Wartosc netto: ");
-        scanf("%f", nowe_zamowienie->wartosc_netto);
-        printf("Numer faktury: ");
-        scanf("%s", nowe_zamowienie->fakt);
-        nowe_zamowienie->wartosc_brutto = ((nowe_zamowienie->vat/100) + 1)*(nowe_zamowienie->wartosc_netto);
-        printf("Wartosc brutto = %f", nowe_zamowienie->wartosc_brutto);
-
+        printf("- Produkt nr %d: \n", ++i);
+        zamowienie *nowe_zamowienie = wpisz_zamowienie(nowa_faktura);
         zamowienia_push_last(lista_zamowien, *nowe_zamowienie);
 
         printf("Wybierz:\n1) Dodaj kolejne zamowienie.\n2) Powrot do menu.");
-        int choice;
-        scanf("%d", choice);
+        int choice = 0;
+        scanf("%d", &choice);
         if (choice == 2) {
             return;
         }
@@ -856,7 +975,7 @@ int main() {
     printf("Podsumuj fakture 1 = %f\n", podsumuj_fakture(&faktura1));
     printf("Podsumuj fakture 2 = %f\n", podsumuj_fakture(&faktura2));
     wczytaj_dane();
-    zapisz_dane();
+    //zapisz_dane();
     printf("Podsumuj fakture 1 = %f\n", podsumuj_fakture(&lista_faktur->next->value));
     printf("Podsumuj fakture 2 = %f\n", podsumuj_fakture(&lista_faktur->next->next->value));
     // TEMP
@@ -884,8 +1003,9 @@ int main() {
                 drukuj_sprzedawce();
                 break;
             case 2:
-                opcja2_stworz_fakture_wersjabeta();
-                // ZAPISZ
+                opcja2_stworz_fakture();
+                zapisz_faktury();
+                zapisz_zamowienia();
                 break;
             case 3:
                 printf("ZAIMPLEMENTOWAC\n");
