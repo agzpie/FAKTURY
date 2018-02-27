@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 #ifndef _STRUCTURES_
 #define _STRUCTURES_
@@ -187,7 +188,19 @@ void zainicjalizuj_sprzedawce() {
 firma* znajdz_firme(char* nr_NIP) {
     firmy *current = lista_firm->next;
     while (current != NULL) {
-        if (strcmp(current->value.nr_NIP,nr_NIP) != 0) {
+        if (strcmp(current->value.nr_NIP, nr_NIP) == 0) {
+            return &(current->value);
+        }
+        current = current->next;
+    }
+
+    return NULL;
+};
+
+faktura* znajdz_fakture(char* nr_faktury) {
+    faktury *current = lista_faktur->next;
+    while (current != NULL) {
+        if (strcmp(current->value.nr_faktury, nr_faktury) == 0) {
             return &(current->value);
         }
         current = current->next;
@@ -409,6 +422,57 @@ void zapisz_firmy() {
     fclose(baza);
 }
 
+void zapisz_faktury() {
+    char *plik = "faktury.db";
+    FILE *baza = fopen(plik, "w");
+    faktury *faktura = lista_faktur->next;
+    char *buffer = malloc(sizeof(char)*100);
+
+    int pierwsza_linia = 1;
+    while (faktura != NULL) {
+        if (pierwsza_linia) {
+            pierwsza_linia = 0;
+        }
+        else {
+            fputc((int)'\n', baza);
+        }
+
+        for (int i = 0; i <strlen(faktura->value.nr_faktury); i++) {
+            fputc(faktura->value.nr_faktury[i], baza);
+        }
+        fputc((int)';', baza);
+
+        for (int i = 0; i <strlen(faktura->value.nabywca->nr_NIP); i++) {
+            fputc(faktura->value.nabywca->nr_NIP[i], baza);
+        }
+        fputc((int)';', baza);
+
+        for (int i = 0; i <strlen(faktura->value.data_wystawienia); i++) {
+            fputc(faktura->value.data_wystawienia[i], baza);
+        }
+        fputc((int)';', baza);
+
+        for (int i = 0; i <strlen(faktura->value.data_sprzedazy); i++) {
+            fputc(faktura->value.data_sprzedazy[i], baza);
+        }
+        fputc((int)';', baza);
+
+        for (int i = 0; i <strlen(faktura->value.sposob_platnosci); i++) {
+            fputc(faktura->value.sposob_platnosci[i], baza);
+        }
+        fputc((int)';', baza);
+
+        for (int i = 0; i <strlen(faktura->value.termin_platnosci); i++) {
+            fputc(faktura->value.termin_platnosci[i], baza);
+        }
+
+        faktura = faktura->next;
+    }
+
+    free(buffer);
+    fclose(baza);
+}
+
 void zapisz_zamowienia() {
     char *plik = "zamowienia.db";
     FILE *baza = fopen(plik, "w");
@@ -481,127 +545,248 @@ void zapisz_zamowienia() {
     fclose(baza);
 }
 
-void zapisz_faktury() {
-    char *plik = "faktury.db";
-    FILE *baza = fopen(plik, "w");
-    faktury *faktura = lista_faktur->next;
-    char *buffer = malloc(sizeof(char)*100);
-
-    int pierwsza_linia = 1;
-    while (faktura != NULL) {
-        if (pierwsza_linia) {
-            pierwsza_linia = 0;
-        }
-        else {
-            fputc((int)'\n', baza);
-        }
-
-        for (int i = 0; i <strlen(faktura->value.nr_faktury); i++) {
-            fputc(faktura->value.nr_faktury[i], baza);
-        }
-        fputc((int)';', baza);
-
-        for (int i = 0; i <strlen(faktura->value.nabywca->nr_NIP); i++) {
-            fputc(faktura->value.nabywca->nr_NIP[i], baza);
-        }
-        fputc((int)';', baza);
-
-        for (int i = 0; i <strlen(faktura->value.data_wystawienia); i++) {
-            fputc(faktura->value.data_wystawienia[i], baza);
-        }
-        fputc((int)';', baza);
-
-        for (int i = 0; i <strlen(faktura->value.data_sprzedazy); i++) {
-            fputc(faktura->value.data_sprzedazy[i], baza);
-        }
-        fputc((int)';', baza);
-
-        for (int i = 0; i <strlen(faktura->value.sposob_platnosci); i++) {
-            fputc(faktura->value.sposob_platnosci[i], baza);
-        }
-        fputc((int)';', baza);
-
-        for (int i = 0; i <strlen(faktura->value.termin_platnosci); i++) {
-            fputc(faktura->value.termin_platnosci[i], baza);
-        }
-
-        faktura = faktura->next;
-    }
-
-    free(buffer);
-    fclose(baza);
-}
-
 void zapisz_dane() {
     zapisz_firmy();
-    zapisz_zamowienia();
     zapisz_faktury();
+    zapisz_zamowienia();
 }
 
-firmy* wczytaj_firmy() {
+void wczytaj_firmy() {
     char *plik = "firmy.db";
     FILE *baza = fopen(plik, "r");
 
     if (baza != NULL) {
+        firmy_clean(lista_firm);
+
         char *buffer = malloc(sizeof(char) * 100); // 100 - maks dlugosc ciagu znakow
 
-        int i = 1; // numer kolumny
-        int poz = 0; // pozycja w wierszu
+        int koniec_pliku = 0;
         char ch;
-        while (1) {
-            ch = (char)fgetc(baza);
-            if ((ch != ';') && (ch != (char)EOF)) {
-                buffer[poz++] = ch;
-            }
-            else {
-                char *value = malloc(sizeof(char) * (poz+1));
 
-                for(int j = 0; j<poz; j++)
-                {
-                    value[j]=buffer[j];
+        while (!koniec_pliku) {
+            int koniec_wiersza = 0;
+            int i = 1; // numer kolumny
+            int poz = 0; // pozycja w wierszu
+
+            // struct ?
+            firma *nowa_firma = malloc(sizeof(firma));
+
+            while (!koniec_wiersza) {
+                ch = (char)fgetc(baza);
+                if (ch != ';' && ch != (char)EOF && ch != '\n' && ch != '\r') {
+                    buffer[poz++] = ch;
                 }
+                else {
+                    char *value = malloc(sizeof(char) * (poz+1));
 
-                value[poz] = '\0';
+                    // strcpy
+                    for(int j = 0; j<poz; j++)
+                    {
+                        value[j]=buffer[j];
+                    }
 
-                switch (i){
-                    case 1: sprz.przedsiebiorca = value;
+                    value[poz] = '\0';
+
+                    switch (i){
+                        case 1: nowa_firma->nazwa_firmy = value;
+                            break;
+                        case 2: nowa_firma->nr_NIP = value;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (ch == '\n' || ch == '\r') {
+                        koniec_wiersza = 1;
+                    }
+
+                    if (ch == (char)EOF) {
+                        koniec_pliku = 1;
                         break;
-                    case 2: sprz.nip = value;
-                        break;
-                    case 3: sprz.nr_konta = value;
-                        break;
-                    default:
-                        break;
+                    }
+
+                    i++;
+                    poz=0;
                 }
-
-                if (ch == (char)EOF)
-                    break;
-
-                i++;
-                poz=0;
             }
+
+            firmy_push_last(lista_firm, *nowa_firma);
         }
 
-        // TODO uncomment + strcpy
-        //free(buffer);
+        free(buffer);
         fclose(baza);
 
         return;
     }
 }
 
-zamowienia* wczytaj_zamowienia() {
+void wczytaj_faktury() {
+    char *plik = "faktury.db";
+    FILE *baza = fopen(plik, "r");
 
+    if (baza != NULL) {
+        faktury_clean(lista_faktur);
+
+        char *buffer = malloc(sizeof(char) * 100); // 100 - maks dlugosc ciagu znakow
+
+        int koniec_pliku = 0;
+        char ch;
+
+        while (!koniec_pliku) {
+            int koniec_wiersza = 0;
+            int i = 1; // numer kolumny
+            int poz = 0; // pozycja w wierszu
+
+            // struct ?
+            faktura *nowa_faktura = malloc(sizeof(faktura));
+
+            while (!koniec_wiersza) {
+                ch = (char) fgetc(baza);
+                if (ch != ';' && ch != (char) EOF && ch != '\n' && ch != '\r') {
+                    buffer[poz++] = ch;
+                } else {
+                    char *value = malloc(sizeof(char) * (poz + 1));
+
+                    // strcpy
+                    for (int j = 0; j < poz; j++) {
+                        value[j] = buffer[j];
+                    }
+
+                    value[poz] = '\0';
+
+                    switch (i) {
+                        case 1:
+                            nowa_faktura->nr_faktury = value;
+                            break;
+                        case 2:
+                            nowa_faktura->nabywca = znajdz_firme(value);
+                            break;
+                        case 3:
+                            nowa_faktura->data_wystawienia = value;
+                            break;
+                        case 4:
+                            nowa_faktura->data_sprzedazy = value;
+                            break;
+                        case 5:
+                            nowa_faktura->sposob_platnosci = value;
+                            break;
+                        case 6:
+                            nowa_faktura->termin_platnosci = value;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (ch == '\n' || ch == '\r') {
+                        koniec_wiersza = 1;
+                    }
+
+                    if (ch == (char) EOF) {
+                        koniec_pliku = 1;
+                        break;
+                    }
+
+                    i++;
+                    poz = 0;
+                }
+            }
+
+            faktury_push_last(lista_faktur, *nowa_faktura);
+        }
+
+        free(buffer);
+        fclose(baza);
+
+        return;
+    }
 }
 
-faktury* wczytaj_faktury() {
+void wczytaj_zamowienia() {
+    char *plik = "zamowienia.db";
+    FILE *baza = fopen(plik, "r");
 
+    if (baza != NULL) {
+        zamowienia_clean(lista_zamowien);
+
+        char *buffer = malloc(sizeof(char) * 100); // 100 - maks dlugosc ciagu znakow
+
+        int koniec_pliku = 0;
+        char ch;
+
+        while (!koniec_pliku) {
+            int koniec_wiersza = 0;
+            int i = 1; // numer kolumny
+            int poz = 0; // pozycja w wierszu
+
+            // struct ?
+            zamowienie *nowe_zamowienie = malloc(sizeof(zamowienie));
+
+            while (!koniec_wiersza) {
+                ch = (char) fgetc(baza);
+                if (ch != ';' && ch != (char) EOF && ch != '\n' && ch != '\r') {
+                    buffer[poz++] = ch;
+                } else {
+                    char *value = malloc(sizeof(char) * (poz + 1));
+
+                    // strcpy
+                    for (int j = 0; j < poz; j++) {
+                        value[j] = buffer[j];
+                    }
+
+                    value[poz] = '\0';
+
+                    switch (i) {
+                        case 1:
+                            nowe_zamowienie->nazwa = value;
+                            break;
+                        case 2:
+                            nowe_zamowienie->fakt = znajdz_fakture(value);
+                            break;
+                        case 3:
+                            // https://stackoverflow.com/questions/7021725/how-to-convert-a-string-to-integer-in-c
+                            nowe_zamowienie->ilosc = (int) strtol(value, (char **)NULL, 10);
+                            break;
+                        case 4:
+                            // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_71/rtref/itof.htm
+                            nowe_zamowienie->vat =  (float)atof(value);
+                            break;
+                        case 5:
+                            nowe_zamowienie->cena_netto = (float)atof(value);
+                            nowe_zamowienie->wartosc_netto = nowe_zamowienie->cena_netto*nowe_zamowienie->ilosc;
+                            nowe_zamowienie->wartosc_brutto = nowe_zamowienie->wartosc_netto*(1 + nowe_zamowienie->vat);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (ch == '\n' || ch == '\r') {
+                        koniec_wiersza = 1;
+                    }
+
+                    if (ch == (char) EOF) {
+                        koniec_pliku = 1;
+                        break;
+                    }
+
+                    i++;
+                    poz = 0;
+                }
+            }
+
+            zamowienia_push_last(lista_zamowien, *nowe_zamowienie);
+        }
+
+        free(buffer);
+        fclose(baza);
+
+        return;
+    }
 }
 
 void wczytaj_dane() {
-    lista_firm = wczytaj_firmy();
-    //lista_zamowien = wczytaj_zamowienia();
-    //lista_faktur = wczytaj_faktury();
+    wczytaj_firmy();
+    wczytaj_faktury();
+    wczytaj_zamowienia();
 }
 
 // MAIN
@@ -625,7 +810,7 @@ int main() {
         return 1;
     lista_zamowien->next = NULL;
 
-    // TEMP
+    // TEMP - TESTY
     firma firmaturbokolor = stworz_firme("turbokolor", "1234567890");
     firma firmanowak = stworz_firme("nowak and nowak", "5678956757");
     firma firmakielbasy = stworz_firme("t-ski kielbasy", "2123576545");
@@ -666,9 +851,12 @@ int main() {
     zamowienia_push_last(lista_zamowien, zamowienie9);
     zamowienia_push_last(lista_zamowien, zamowienie10);
     zamowienia_push_last(lista_zamowien, zamowienie11);
-    zapisz_dane();
     printf("Podsumuj fakture 1 = %f\n", podsumuj_fakture(&faktura1));
     printf("Podsumuj fakture 2 = %f\n", podsumuj_fakture(&faktura2));
+    wczytaj_dane();
+    zapisz_dane();
+    printf("Podsumuj fakture 1 = %f\n", podsumuj_fakture(&lista_faktur->next->value));
+    printf("Podsumuj fakture 2 = %f\n", podsumuj_fakture(&lista_faktur->next->next->value));
     // TEMP
 
     zainicjalizuj_sprzedawce();
@@ -709,7 +897,7 @@ int main() {
                 break;
             case 5:
                 opcja5_dodaj_firme();
-                // ZAPISZ
+                zapisz_firmy();
                 break;
             case 6:
                 printf("ZAIMPLEMENTOWAC\n");
