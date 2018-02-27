@@ -212,27 +212,54 @@ void opcja2_stworz_fakture_wersjabeta () {
     zamowienie *zam;
     fak = malloc(sizeof(faktura));
     fir = malloc(sizeof(firma));
-    zam = malloc (sizeof(zamowienie));
+    zam = malloc(sizeof(zamowienie));
+    int ilosc;
+    float cenanetto;
+    char *nazwa = malloc(sizeof(char)*20);
 
     printf("Podaj nazwe produktu, jego ilosc, cene netto: ");
-    scanf("%s, %d, %f", zam->nazwa, zam->ilosc, zam->cena_netto);
+    scanf("%s %d %f", nazwa, &ilosc, &cenanetto);
 
+    zam->nazwa = nazwa;
+    zam->ilosc = ilosc;
+    zam->cena_netto = cenanetto;
+
+    char *datawyst = malloc(sizeof(char)*10);
+    char *datasprz = malloc(sizeof(char)*10);
+    char *dataplat = malloc(sizeof(char)*10);
+    char *sposob = malloc(sizeof(char)*20);
 
     printf("Podaj date wystawienia faktury, sprzedazy, sposob platnosci i termin platnosci: ");
-    scanf("%s, %s, %s, %s", fak->data_wystawienia, fak->data_sprzedazy, fak->sposob_platnosci, fak->termin_platnosci);
-    printf("Podaj numer faktury: ");
-    scanf("%s", fak->nr_faktury);
-    printf("Podaj nabywcę: ");
-    scanf("%s", fir->nazwa_firmy);
-    printf("Podaj numer NIP: ");
-    scanf("%s", fir->nr_NIP);
+    scanf("%s %s %s %s", datawyst, datasprz, sposob, dataplat);
 
+    char *nabywca = malloc(sizeof(char)*40);
+    char *nip = malloc(sizeof(char)*10);
+    char *nrfak = malloc(sizeof(char)*10);
+
+    printf("Podaj numer faktury: ");
+    scanf("%s", nrfak);
+    printf("Podaj nabywce: ");
+    scanf("%s", nabywca);
+    printf("Podaj numer NIP: ");
+    scanf("%s", nip);
+
+    nrfak = fak->nr_faktury;
+    nabywca = fir->nazwa_firmy;
+    nip = fir->nr_NIP;
+    //not finished
     printf("\n___________________\n");
 
-    printf("FAKTURA VAT\nNumer: %s\n\nSprzedawca:\n%s\nNIP: %s\nNr konta: %s\n\n", fak->nr_faktury, sprz.przedsiebiorca, sprz.nip, sprz.nr_konta);
-    printf("Nabywca:\n%d\nNIP: %d\n", fir->nazwa_firmy, fir->nr_NIP);
-
-
+    //FAKTURA
+    printf("FAKTURA VAT\nNumer: %s\n\nSprzedawca:\n%s\nNIP: %s\nNr konta: %s\n\n", nrfak, sprz.przedsiebiorca, sprz.nip, sprz.nr_konta);
+    printf("Nabywca:\n%s\nNIP: %s\n", nabywca, nip);
+    float wartosc_netto, vat, cena_brutto, wartosc_brutto;
+    printf("Nazwa produktu: %s\tIlosc: %d\tCena netto: %f\t", zam->nazwa, zam->ilosc, zam->cena_netto);
+    wartosc_netto = zam->cena_netto*zam->ilosc;
+    vat = 0.23;
+    cena_brutto = zam->cena_netto*(1+vat);
+    wartosc_brutto = cena_brutto*zam->ilosc;
+    printf("Wartosc netto: %f\tVAT: %f\tCena brutto: %f\tWartosc brutto: %f\n", wartosc_netto, vat, cena_brutto, wartosc_brutto);
+    printf("\n___________________\n");
 
 }
 
@@ -473,7 +500,7 @@ int main() {
                 drukuj_sprzedawce();
                 break;
             case 2:
-                opcja2_stworz_fakture();
+                opcja2_stworz_fakture_wersjabeta();
                 // ZAPISZ
                 break;
             case 3:
